@@ -1,0 +1,66 @@
+﻿using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using BeyadAmi.Server.Application.Interfaces.Services;
+using BeyadAmi.Server.Application.DTOs.Device;
+
+namespace BeyadAmi.Server.Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class DevicesController : ControllerBase
+    {
+        private readonly IDeviceService _deviceService;
+
+        public DevicesController(IDeviceService deviceService)
+        {
+            _deviceService = deviceService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetAll()
+        {
+            var devices = await _deviceService.GetAllAsync();
+            return Ok(devices);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<DeviceDto>> GetById(int id)
+        {
+            var device = await _deviceService.GetByIdAsync(id);
+            if (device == null)
+                return NotFound();
+            return Ok(device);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create([FromBody] CreateDeviceDto dto)
+        {
+            if (dto == null)
+                return BadRequest();
+
+            var newId = await _deviceService.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = newId }, null);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateDeviceDto dto)
+        {
+            if (dto == null)
+                return BadRequest();
+
+            if (dto.DeviceId != id)
+                return BadRequest("Id mismatch.");
+
+            await _deviceService.UpdateAsync(dto);
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await _deviceService.DeleteAsync(id);
+            return NoContent();
+        }
+    }
+}
