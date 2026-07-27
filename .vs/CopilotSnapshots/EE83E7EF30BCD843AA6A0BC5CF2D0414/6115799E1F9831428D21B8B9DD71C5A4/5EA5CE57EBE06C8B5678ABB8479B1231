@@ -1,0 +1,16 @@
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using BeyadAmi.Server.Domain.Entities;
+
+namespace BeyadAmi.Server.Application.Interfaces.Repositories
+{
+    public interface IBranchRepository
+    {
+        Task<int> CreateAsync(Branch branch, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Branch branch, CancellationToken cancellationToken = default);
+        Task DeleteAsync(int branchId, CancellationToken cancellationToken = default);
+        Task<Branch?> GetByIdAsync(int branchId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Branch>> GetAllAsync(CancellationToken cancellationToken = default);
+    }
+}

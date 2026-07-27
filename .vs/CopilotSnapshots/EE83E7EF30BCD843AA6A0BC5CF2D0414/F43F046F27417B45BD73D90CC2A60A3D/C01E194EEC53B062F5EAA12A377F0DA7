@@ -1,0 +1,17 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using BeyadAmi.Server.Application.Interfaces.Services;
+using BeyadAmi.Server.Application.Services;
+
+namespace BeyadAmi.Server.Application.Extensions
+{
+    public static class ServiceRegistration
+    {
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
+            services.AddScoped<IBranchService, BranchService>();
+            services.AddScoped<IDeviceService, DeviceService>();
+
+            return services;
+        }
+    }
+}

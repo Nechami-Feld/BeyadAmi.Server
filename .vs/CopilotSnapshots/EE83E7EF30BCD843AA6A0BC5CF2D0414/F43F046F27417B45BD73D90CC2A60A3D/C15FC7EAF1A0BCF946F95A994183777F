@@ -1,4 +1,5 @@
-using BeyadAmi.Server.Application.Interfaces.Repositories;
+ï»¿using BeyadAmi.Server.Application.Interfaces.Repositories;
+using BeyadAmi.Server.Application.Extensions;
 using BeyadAmi.Server.Infrastructure.Extensions;
 
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register infrastructure and application services via extension methods
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 
@@ -15,15 +17,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Swagger ø÷ áñáéáú Development
+// Swagger ×¨×§ ×‘×¡×‘×™×‘×ª Development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// Global exception handling middleware - must be before controllers
-app.UseMiddleware<BeyadAmi.Server.Api.Middleware.ExceptionMiddleware>();
 
 app.MapControllers();
 

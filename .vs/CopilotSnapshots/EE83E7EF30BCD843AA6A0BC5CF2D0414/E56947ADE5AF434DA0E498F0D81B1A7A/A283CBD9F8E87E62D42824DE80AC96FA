@@ -1,0 +1,130 @@
+﻿using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using BeyadAmi.Server.Application.Interfaces.Services;
+using BeyadAmi.Server.Application.DTOs.Device;
+using BeyadAmi.Server.Application.Validators;
+using Microsoft.Extensions.Logging;
+using System.Linq;
+
+namespace BeyadAmi.Server.Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class DevicesController : ControllerBase
+    {
+        private readonly IDeviceService _deviceService;
+        private readonly ILogger<DevicesController> _logger;
+
+        public DevicesController(IDeviceService deviceService, ILogger<DevicesController> logger)
+        {
+            _deviceService = deviceService;
+            _logger = logger;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetAll()
+        {
+            try
+            {
+                var devices = await _deviceService.GetAllAsync();
+                return Ok(devices);
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching devices");
+                return StatusCode(500, "An error occurred while fetching devices.");
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<DeviceDto>> GetById(int id)
+        {
+            try
+            {
+                var device = await _deviceService.GetByIdAsync(id);
+                if (device == null)
+                    return NotFound();
+                return Ok(device);
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching device by id {DeviceId}", id);
+                return StatusCode(500, "An error occurred while fetching the device.");
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create([FromBody] CreateDeviceDto dto)
+        {
+            if (dto == null)
+                return BadRequest("Request body is required.");
+
+            var validator = new CreateDeviceValidator();
+            var errors = validator.Validate(dto).ToArray();
+            if (errors.Any())
+                return BadRequest(new { Errors = errors });
+
+            try
+            {
+                var newId = await _deviceService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = newId }, null);
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Error creating device");
+                return StatusCode(500, "An error occurred while creating the device.");
+            }
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateDeviceDto dto)
+        {
+            if (dto == null)
+                return BadRequest("Request body is required.");
+
+            if (dto.DeviceId != id)
+                return BadRequest("Id mismatch.");
+
+            // reuse create validator for basic validation of fields
+            var validator = new CreateDeviceValidator();
+            var errors = validator.Validate(new CreateDeviceDto
+            {
+                DeviceTypeId = dto.DeviceTypeId,
+                BranchId = dto.BranchId,
+                DeviceNumber = dto.DeviceNumber,
+                Company = dto.Company,
+                Notes = dto.Notes
+            }).ToArray();
+
+            if (errors.Any())
+                return BadRequest(new { Errors = errors });
+
+            try
+            {
+                await _deviceService.UpdateAsync(dto);
+                return NoContent();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Error updating device {DeviceId}", id);
+                return StatusCode(500, "An error occurred while updating the device.");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            try
+            {
+                await _deviceService.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting device {DeviceId}", id);
+                return StatusCode(500, "An error occurred while deleting the device.");
+            }
+        }
+    }
+}

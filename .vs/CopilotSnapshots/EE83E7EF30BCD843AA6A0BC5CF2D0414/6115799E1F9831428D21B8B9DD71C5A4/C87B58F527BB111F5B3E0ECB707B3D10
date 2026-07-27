@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -42,8 +42,8 @@ namespace BeyadAmi.Server.Application.Services
                 CreatedDate = DateTime.UtcNow
             };
 
-            await _repository.AddAsync(entity, cancellationToken);
-            return entity.DeviceId;
+            var id = await _repository.CreateAsync(entity, cancellationToken);
+            return id;
         }
 
         public async Task UpdateAsync(UpdateDeviceDto dto, CancellationToken cancellationToken = default)
@@ -68,7 +68,7 @@ namespace BeyadAmi.Server.Application.Services
             existing.Company = dto.Company;
             existing.Notes = dto.Notes;
 
-            _repository.Update(existing);
+            await _repository.UpdateAsync(existing, cancellationToken);
         }
 
         public async Task DeleteAsync(int deviceId, CancellationToken cancellationToken = default)
@@ -80,7 +80,7 @@ namespace BeyadAmi.Server.Application.Services
             if (existing.Loans != null && existing.Loans.Any(l => l.ReturnDate == null))
                 throw new BusinessException("Cannot delete device with an active loan.");
 
-            _repository.Delete(existing);
+            await _repository.DeleteAsync(deviceId, cancellationToken);
         }
 
         public async Task<DeviceDto?> GetByIdAsync(int deviceId, CancellationToken cancellationToken = default)

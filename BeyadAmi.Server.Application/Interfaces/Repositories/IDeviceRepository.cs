@@ -1,17 +1,19 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using BeyadAmi.Server.Application.DTOs.Device;
 using BeyadAmi.Server.Domain.Entities;
 
 namespace BeyadAmi.Server.Application.Interfaces.Repositories
 {
     public interface IDeviceRepository
     {
-        Task<int> CreateAsync(Device device, CancellationToken cancellationToken = default);
-        Task UpdateAsync(Device device, CancellationToken cancellationToken = default);
-        Task DeleteAsync(int deviceId, CancellationToken cancellationToken = default);
         Task<Device?> GetByIdAsync(int deviceId, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Device>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<Device>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<Device>> GetAvailableAsync(int branchId, CancellationToken cancellationToken = default);
+        Task<bool> ExistsByNumberAsync(string deviceNumber, CancellationToken cancellationToken = default);
+        Task<bool> HasActiveLoansAsync(int deviceId, CancellationToken cancellationToken = default);
+        Task AddAsync(Device device, CancellationToken cancellationToken = default);
+        void Update(Device device);
+        void Delete(Device device);
     }
 }
