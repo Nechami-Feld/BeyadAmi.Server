@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using BeyadAmi.Server.Application.DTOs.Device;
 using BeyadAmi.Server.Domain.Entities;
@@ -7,10 +8,10 @@ namespace BeyadAmi.Server.Application.Interfaces.Repositories
 {
     public interface IDeviceRepository
     {
-        Task<int> CreateAsync(Device device);
-        Task UpdateAsync(Device device);
-        Task DeleteAsync(int deviceId);
-        Task<Device?> GetByIdAsync(int deviceId);
-        Task<IEnumerable<Device>> GetAllAsync();
+        Task<int> CreateAsync(Device device, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Device device, CancellationToken cancellationToken = default);
+        Task DeleteAsync(int deviceId, CancellationToken cancellationToken = default);
+        Task<Device?> GetByIdAsync(int deviceId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Device>> GetAllAsync(CancellationToken cancellationToken = default);
     }
 }

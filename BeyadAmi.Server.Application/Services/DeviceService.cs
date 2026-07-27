@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using BeyadAmi.Server.Application.DTOs.Device;
+using BeyadAmi.Server.Application.Interfaces.Repositories;
+using BeyadAmi.Server.Application.Interfaces.Services;
+using BeyadAmi.Server.Application.Exceptions;
+using BeyadAmi.Server.Domain.Entities;
+
+namespace BeyadAmi.Server.Application.Services
+{
+    public class DeviceService : IDeviceService
+    {
+        private readonly IDeviceRepository _repository;
+
+        public DeviceService(IDeviceRepository repository)
+        {
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
+        public async Task<int> CreateAsync(CreateDeviceDto dto, CancellationToken cancellationToken = default)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            // Business rule: DeviceNumber must be unique (if provided)
+            if (!string.IsNullOrWhiteSpace(dto.DeviceNumber))
+            {
+                var all = await _repository.GetAllAsync(cancellationToken);
+                if (all.Any(d => string.Equals(d.DeviceNumber, dto.DeviceNumber, StringComparison.OrdinalIgnoreCase)))
+                    throw new BusinessException("DeviceNumber must be unique.");
+            }
+
+            var entity = new Device
+            {
+                DeviceTypeId = dto.DeviceTypeId,
+                BranchId = dto.BranchId,
+                DeviceNumber = dto.DeviceNumber,
+                Company = dto.Company,
+                Notes = dto.Notes,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            var id = await _repository.CreateAsync(entity, cancellationToken);
+            return id;
+        }
+
+        public async Task UpdateAsync(UpdateDeviceDto dto, CancellationToken cancellationToken = default)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            var existing = await _repository.GetByIdAsync(dto.DeviceId, cancellationToken);
+            if (existing == null) throw new BusinessException("Device not found.");
+
+            // Business rule: DeviceNumber must be unique among others
+            if (!string.IsNullOrWhiteSpace(dto.DeviceNumber))
+            {
+                var all = await _repository.GetAllAsync(cancellationToken);
+                if (all.Any(d => d.DeviceId != dto.DeviceId && string.Equals(d.DeviceNumber, dto.DeviceNumber, StringComparison.OrdinalIgnoreCase)))
+                    throw new BusinessException("DeviceNumber must be unique.");
+            }
+
+            // apply updates
+            existing.DeviceTypeId = dto.DeviceTypeId;
+            existing.BranchId = dto.BranchId;
+            existing.DeviceNumber = dto.DeviceNumber;
+            existing.Company = dto.Company;
+            existing.Notes = dto.Notes;
+
+            await _repository.UpdateAsync(existing, cancellationToken);
+        }
+
+        public async Task DeleteAsync(int deviceId, CancellationToken cancellationToken = default)
+        {
+            var existing = await _repository.GetByIdAsync(deviceId, cancellationToken);
+            if (existing == null) return; // idempotent
+
+            // Business rule: cannot delete if there is an active loan (ReturnDate == null)
+            if (existing.Loans != null && existing.Loans.Any(l => l.ReturnDate == null))
+                throw new BusinessException("Cannot delete device with an active loan.");
+
+            await _repository.DeleteAsync(deviceId, cancellationToken);
+        }
+
+        public async Task<DeviceDto?> GetByIdAsync(int deviceId, CancellationToken cancellationToken = default)
+        {
+            var entity = await _repository.GetByIdAsync(deviceId, cancellationToken);
+            if (entity == null) return null;
+
+            return MapToDto(entity);
+        }
+
+        public async Task<IEnumerable<DeviceDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            var all = await _repository.GetAllAsync(cancellationToken);
+            return all.Select(MapToDto).ToList();
+        }
+
+        private static DeviceDto MapToDto(Device d) => new DeviceDto
+        {
+            DeviceId = d.DeviceId,
+            DeviceTypeId = d.DeviceTypeId,
+            BranchId = d.BranchId,
+            DeviceNumber = d.DeviceNumber,
+            Company = d.Company,
+            Notes = d.Notes,
+            CreatedDate = d.CreatedDate
+        };
+    }
+}
