@@ -55,3 +55,5 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+/.vs/BeyadAmi.Server/CopilotIndices/17.14.1681.23550
+/.vs/BeyadAmi.Server/FileContentIndex
