@@ -1,0 +1,9 @@
+﻿namespace BeyadAmi.Server.Domain.Entities
+{
+    public enum DepositType
+    {
+        Money = 1,
+        Check = 2,
+        None = 3
+    }
+}

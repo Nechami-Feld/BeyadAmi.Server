@@ -57,3 +57,10 @@ TestResult.xml
 nunit-*.xml
 /.vs/BeyadAmi.Server/CopilotIndices/17.14.1681.23550
 /.vs/BeyadAmi.Server/FileContentIndex
+/.vs/BeyadAmi.Server/DesignTimeBuild
+*.v2
+/.vs/BeyadAmi.Server/v17/DocumentLayout.backup.json
+/.vs/BeyadAmi.Server/v17/DocumentLayout.json
+/.vs/BeyadAmi.Server/v17/.wsuo
+/.vs/BeyadAmi.Server/v17/.suo
+/.vs/ProjectEvaluation

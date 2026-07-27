@@ -1,0 +1,30 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using BeyadAmi.Server.Domain.Entities;
+
+namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
+{
+    public class DeviceCategoryConfiguration : IEntityTypeConfiguration<DeviceCategory>
+    {
+        public void Configure(EntityTypeBuilder<DeviceCategory> builder)
+        {
+            builder.ToTable("DeviceCategories");
+
+            builder.HasKey(dc => dc.CategoryId);
+
+            builder.Property(dc => dc.CategoryName)
+                .HasMaxLength(200);
+
+            builder.Property(dc => dc.Description)
+                .HasMaxLength(1000)
+                .HasColumnType("nvarchar(1000)");
+
+            builder.HasMany(dc => dc.DeviceTypes)
+                .WithOne(dt => dt.Category)
+                .HasForeignKey(dt => dt.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(dc => dc.CategoryName).HasDatabaseName("IX_DeviceCategories_CategoryName");
+        }
+    }
+}

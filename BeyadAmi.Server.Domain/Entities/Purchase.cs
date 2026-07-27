@@ -1,0 +1,27 @@
+using System;
+
+namespace BeyadAmi.Server.Domain.Entities
+{
+    public class Purchase
+    {
+        public int PurchaseId { get; set; }
+        public int StoreId { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal PricePerUnit { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string? BuyerName { get; set; }
+        public DateTime PurchaseDate { get; set; }
+        public string? ReceiptFile { get; set; }
+        public string? Notes { get; set; }
+
+        // Navigation
+        public Store? Store { get; set; }
+        public Product? Product { get; set; }
+
+        public Purchase()
+        {
+            PurchaseDate = DateTime.UtcNow;
+        }
+    }
+}

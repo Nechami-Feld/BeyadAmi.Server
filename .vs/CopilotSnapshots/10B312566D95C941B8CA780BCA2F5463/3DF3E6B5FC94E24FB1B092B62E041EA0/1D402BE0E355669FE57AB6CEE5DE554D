@@ -1,0 +1,23 @@
+﻿using System;
+
+namespace BeyadAmi.Server.Domain.Entities
+{
+    public class BranchRequest
+    {
+        public int RequestId { get; set; }
+        public int BranchId { get; set; }
+        public DateTime RequestDate { get; set; }
+        public string? Description { get; set; }
+        public bool IsCompleted { get; set; }
+        public DateTime? CompletedDate { get; set; }
+        public string? Notes { get; set; }
+
+        // Navigation
+        public Branch? Branch { get; set; }
+
+        public BranchRequest()
+        {
+            RequestDate = DateTime.UtcNow;
+        }
+    }
+}
