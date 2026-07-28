@@ -1,4 +1,6 @@
 using BeyadAmi.Server.Application.Interfaces.Repositories;
+using BeyadAmi.Server.Application.Interfaces.Services;
+using BeyadAmi.Server.Application.Services;
 using BeyadAmi.Server.Infrastructure.Extensions;
 
 
@@ -6,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register infrastructure and application services via extension methods
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddHttpClient<IAddressService, AddressService>();
 
 builder.Services.AddControllers();
 
