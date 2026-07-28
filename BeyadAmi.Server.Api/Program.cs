@@ -13,6 +13,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Angular",
+        policy =>
+        {
+            policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Swagger רק בסביבת Development
@@ -26,5 +38,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<BeyadAmi.Server.Api.Middleware.ExceptionMiddleware>();
 
 app.MapControllers();
+
+app.UseCors("Angular");
+//app.UseAuthorization();
 
 app.Run();
