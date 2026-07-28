@@ -1,0 +1,33 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using BeyadAmi.Server.Application.DTOs.Stores;
+
+namespace BeyadAmi.Server.Application.Validators
+{
+    public class CreateStoreValidator
+    {
+        private static readonly Regex PhoneRegex = new(@"^[0-9+\-\s()]{7,20}$", RegexOptions.Compiled);
+
+        public IEnumerable<string> Validate(CreateStoreDto dto)
+        {
+            if (dto == null)
+                return new[] { "Store payload is required." };
+
+            var errors = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(dto.StoreName))
+                errors.Add("StoreName is required.");
+
+            if (!string.IsNullOrWhiteSpace(dto.StoreName) && dto.StoreName.Length > 100)
+                errors.Add("StoreName must be at most 100 characters.");
+
+            if (!string.IsNullOrWhiteSpace(dto.Phone) && !PhoneRegex.IsMatch(dto.Phone))
+                errors.Add("Phone format is invalid.");
+
+            return errors;
+        }
+
+        public bool IsValid(CreateStoreDto dto) => !Validate(dto).Any();
+    }
+}

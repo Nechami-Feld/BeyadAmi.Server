@@ -19,14 +19,20 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
 
             services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<IDeviceRepository, DeviceRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IDeviceCategoryRepository, DeviceCategoryRepository>();
 
             // Validators
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateBranchValidator>();
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateDeviceValidator>();
+            services.AddScoped<BeyadAmi.Server.Application.Validators.CreateStoreValidator>();
+            services.AddScoped<BeyadAmi.Server.Application.Validators.CreateDeviceCategoryValidator>();
 
             // Register application services here so the Api project only needs to call infrastructure registration
             services.AddScoped<IBranchService, BranchService>();
             services.AddScoped<IDeviceService, DeviceService>();
+            services.AddScoped<IStoreService, StoreService>();
+            services.AddScoped<IDeviceCategoryService, DeviceCategoryService>();
 
             return services;
         }
