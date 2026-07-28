@@ -22,6 +22,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<IStoreRepository, StoreRepository>();
             services.AddScoped<IDeviceCategoryRepository, DeviceCategoryRepository>();
             services.AddScoped<IBranchRequestRepository, BranchRequestRepository>();
+            services.AddScoped<ILoanRepository, LoanRepository>();
 
             // Validators
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateBranchValidator>();
@@ -29,6 +30,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateStoreValidator>();
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateDeviceCategoryValidator>();
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateBranchRequestValidator>();
+            services.AddScoped<BeyadAmi.Server.Application.Validators.CreateLoanValidator>();
 
             // Register application services here so the Api project only needs to call infrastructure registration
             services.AddScoped<IBranchService, BranchService>();
@@ -36,6 +38,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<IDeviceCategoryService, DeviceCategoryService>();
             services.AddScoped<IBranchRequestService, BranchRequestService>();
+            services.AddScoped<ILoanService, LoanService>();
 
             return services;
         }
