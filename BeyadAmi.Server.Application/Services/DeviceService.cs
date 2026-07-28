@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BeyadAmi.Server.Application.DTOs.Device;
+using BeyadAmi.Server.Application.Exceptions;
 using BeyadAmi.Server.Application.Interfaces.Repositories;
 using BeyadAmi.Server.Application.Interfaces.Services;
-using BeyadAmi.Server.Application.Exceptions;
+using BeyadAmi.Server.Application.Validators;
 using BeyadAmi.Server.Domain.Entities;
 
 namespace BeyadAmi.Server.Application.Services
@@ -14,6 +15,7 @@ namespace BeyadAmi.Server.Application.Services
     public class DeviceService : IDeviceService
     {
         private readonly IDeviceRepository _repository;
+        private readonly CreateDeviceValidator _validator = new();
 
         public DeviceService(IDeviceRepository repository)
         {
@@ -24,13 +26,12 @@ namespace BeyadAmi.Server.Application.Services
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
 
-            // Business rule: DeviceNumber must be unique (if provided)
-            if (!string.IsNullOrWhiteSpace(dto.DeviceNumber))
-            {
-                var all = await _repository.GetAllAsync(cancellationToken);
-                if (all.Any(d => string.Equals(d.DeviceNumber, dto.DeviceNumber, StringComparison.OrdinalIgnoreCase)))
-                    throw new BusinessException("DeviceNumber must be unique.");
-            }
+            var errors = _validator.Validate(dto).ToList();
+            if (errors.Any())
+                throw new BusinessException(string.Join(" ", errors));
+
+            if (await _repository.ExistsByNumberAsync(dto.DeviceNumber!, cancellationToken))
+                throw new DeviceAlreadyExistsException(dto.DeviceNumber!);
 
             var entity = new Device
             {
@@ -46,25 +47,15 @@ namespace BeyadAmi.Server.Application.Services
             return entity.DeviceId;
         }
 
-        public async Task UpdateAsync(UpdateDeviceDto dto, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(int deviceId, UpdateDeviceDto dto, CancellationToken cancellationToken = default)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
 
-            var existing = await _repository.GetByIdAsync(dto.DeviceId, cancellationToken);
-            if (existing == null) throw new BusinessException("Device not found.");
+            var existing = await _repository.GetByIdAsync(deviceId, cancellationToken)
+                ?? throw new DeviceNotFoundException(deviceId);
 
-            // Business rule: DeviceNumber must be unique among others
-            if (!string.IsNullOrWhiteSpace(dto.DeviceNumber))
-            {
-                var all = await _repository.GetAllAsync(cancellationToken);
-                if (all.Any(d => d.DeviceId != dto.DeviceId && string.Equals(d.DeviceNumber, dto.DeviceNumber, StringComparison.OrdinalIgnoreCase)))
-                    throw new BusinessException("DeviceNumber must be unique.");
-            }
-
-            // apply updates
             existing.DeviceTypeId = dto.DeviceTypeId;
             existing.BranchId = dto.BranchId;
-            existing.DeviceNumber = dto.DeviceNumber;
             existing.Company = dto.Company;
             existing.Notes = dto.Notes;
 
@@ -74,11 +65,10 @@ namespace BeyadAmi.Server.Application.Services
         public async Task DeleteAsync(int deviceId, CancellationToken cancellationToken = default)
         {
             var existing = await _repository.GetByIdAsync(deviceId, cancellationToken);
-            if (existing == null) return; // idempotent
+            if (existing == null) return;
 
-            // Business rule: cannot delete if there is an active loan (ReturnDate == null)
-            if (existing.Loans != null && existing.Loans.Any(l => l.ReturnDate == null))
-                throw new BusinessException("Cannot delete device with an active loan.");
+            if (await _repository.HasActiveLoansAsync(deviceId, cancellationToken))
+                throw new DeviceHasActiveLoanException(deviceId);
 
             _repository.Delete(existing);
         }
@@ -86,26 +76,39 @@ namespace BeyadAmi.Server.Application.Services
         public async Task<DeviceDto?> GetByIdAsync(int deviceId, CancellationToken cancellationToken = default)
         {
             var entity = await _repository.GetByIdAsync(deviceId, cancellationToken);
-            if (entity == null) return null;
-
-            return MapToDto(entity);
+            return entity == null ? null : MapToDto(entity);
         }
 
-        public async Task<IEnumerable<DeviceDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<List<DeviceDto>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             var all = await _repository.GetAllAsync(cancellationToken);
             return all.Select(MapToDto).ToList();
         }
 
-        private static DeviceDto MapToDto(Device d) => new DeviceDto
+        public async Task<List<DeviceDto>> GetByBranchAsync(int branchId, CancellationToken cancellationToken = default)
+        {
+            var all = await _repository.GetByBranchAsync(branchId, cancellationToken);
+            return all.Select(MapToDto).ToList();
+        }
+
+        public async Task<List<DeviceDto>> GetAvailableAsync(int branchId, CancellationToken cancellationToken = default)
+        {
+            var all = await _repository.GetAvailableAsync(branchId, cancellationToken);
+            return all.Select(MapToDto).ToList();
+        }
+
+        private static DeviceDto MapToDto(Device d) => new()
         {
             DeviceId = d.DeviceId,
-            DeviceTypeId = d.DeviceTypeId,
-            BranchId = d.BranchId,
             DeviceNumber = d.DeviceNumber,
+            DeviceTypeId = d.DeviceTypeId,
+            DeviceTypeName = d.DeviceType?.DeviceName,
+            CategoryName = d.DeviceType?.Category?.CategoryName,
+            BranchId = d.BranchId,
+            BranchName = d.Branch?.BranchName,
             Company = d.Company,
-            Notes = d.Notes,
-            CreatedDate = d.CreatedDate
+            IsAvailable = !d.IsLoaned,
+            Notes = d.Notes
         };
     }
 }

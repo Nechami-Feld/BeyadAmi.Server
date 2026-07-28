@@ -1,12 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using BeyadAmi.Server.Application.Interfaces.Services;
 using BeyadAmi.Server.Application.DTOs.Device;
-using BeyadAmi.Server.Application.Validators;
+using BeyadAmi.Server.Application.Interfaces.Services;
 
 namespace BeyadAmi.Server.Api.Controllers
 {
@@ -14,15 +11,11 @@ namespace BeyadAmi.Server.Api.Controllers
     [Route("api/[controller]")]
     public class DevicesController : ControllerBase
     {
-        private readonly IDeviceService _deviceService;
-        private readonly ILogger<DevicesController> _logger;
-        private readonly CreateDeviceValidator _validator;
+        private readonly IDeviceService _service;
 
-        public DevicesController(IDeviceService deviceService, ILogger<DevicesController> logger, CreateDeviceValidator validator)
+        public DevicesController(IDeviceService service)
         {
-            _deviceService = deviceService;
-            _logger = logger;
-            _validator = validator;
+            _service = service;
         }
 
         /// <summary>
@@ -32,8 +25,8 @@ namespace BeyadAmi.Server.Api.Controllers
         [ProducesResponseType(typeof(IEnumerable<DeviceDto>), 200)]
         public async Task<ActionResult<IEnumerable<DeviceDto>>> GetAll(CancellationToken cancellationToken = default)
         {
-            var devices = await _deviceService.GetAllAsync(cancellationToken);
-            return Ok(devices);
+            var result = await _service.GetAllAsync(cancellationToken);
+            return Ok(result);
         }
 
         /// <summary>
@@ -44,10 +37,32 @@ namespace BeyadAmi.Server.Api.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<DeviceDto>> GetById(int id, CancellationToken cancellationToken = default)
         {
-            var device = await _deviceService.GetByIdAsync(id, cancellationToken);
-            if (device == null)
+            var result = await _service.GetByIdAsync(id, cancellationToken);
+            if (result == null)
                 return NotFound();
-            return Ok(device);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get all devices for a specific branch
+        /// </summary>
+        [HttpGet("branch/{branchId:int}")]
+        [ProducesResponseType(typeof(IEnumerable<DeviceDto>), 200)]
+        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetByBranch(int branchId, CancellationToken cancellationToken = default)
+        {
+            var result = await _service.GetByBranchAsync(branchId, cancellationToken);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get available devices for loan in a specific branch
+        /// </summary>
+        [HttpGet("available/{branchId:int}")]
+        [ProducesResponseType(typeof(IEnumerable<DeviceDto>), 200)]
+        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetAvailable(int branchId, CancellationToken cancellationToken = default)
+        {
+            var result = await _service.GetAvailableAsync(branchId, cancellationToken);
+            return Ok(result);
         }
 
         /// <summary>
@@ -61,11 +76,7 @@ namespace BeyadAmi.Server.Api.Controllers
             if (dto == null)
                 return BadRequest("Request body is required.");
 
-            var errors = _validator.Validate(dto).ToArray();
-            if (errors.Any())
-                return BadRequest(new { Errors = errors });
-
-            var newId = await _deviceService.CreateAsync(dto, cancellationToken);
+            var newId = await _service.CreateAsync(dto, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id = newId }, null);
         }
 
@@ -81,24 +92,8 @@ namespace BeyadAmi.Server.Api.Controllers
             if (dto == null)
                 return BadRequest("Request body is required.");
 
-            if (dto.DeviceId != id)
-                return BadRequest("Id mismatch.");
-
-            // reuse create validator for basic validation of fields
-            var errors = _validator.Validate(new CreateDeviceDto
-            {
-                DeviceTypeId = dto.DeviceTypeId,
-                BranchId = dto.BranchId,
-                DeviceNumber = dto.DeviceNumber,
-                Company = dto.Company,
-                Notes = dto.Notes
-            }).ToArray();
-
-            if (errors.Any())
-                return BadRequest(new { Errors = errors });
-
-            await _deviceService.UpdateAsync(dto, cancellationToken);
-            return NoContent();
+            await _service.UpdateAsync(id, dto, cancellationToken);
+            return Ok();
         }
 
         /// <summary>
@@ -109,7 +104,7 @@ namespace BeyadAmi.Server.Api.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            await _deviceService.DeleteAsync(id, cancellationToken);
+            await _service.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
     }

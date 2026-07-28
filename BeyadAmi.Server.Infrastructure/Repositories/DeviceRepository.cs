@@ -66,7 +66,23 @@ namespace BeyadAmi.Server.Infrastructure.Repositories
         public async Task<List<Device>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _db.Devices
+                .Include(d => d.DeviceType)
+                    .ThenInclude(dt => dt!.Category)
+                .Include(d => d.Branch)
+                .Include(d => d.Loans)
                 .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<Device>> GetByBranchAsync(int branchId, CancellationToken cancellationToken = default)
+        {
+            return await _db.Devices
+                .Include(d => d.DeviceType)
+                    .ThenInclude(dt => dt!.Category)
+                .Include(d => d.Branch)
+                .Include(d => d.Loans)
+                .AsNoTracking()
+                .Where(d => d.BranchId == branchId)
                 .ToListAsync(cancellationToken);
         }
 

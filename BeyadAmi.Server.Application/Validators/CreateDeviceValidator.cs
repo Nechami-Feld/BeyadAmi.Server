@@ -21,8 +21,10 @@ namespace BeyadAmi.Server.Application.Validators
             if (dto.BranchId <= 0)
                 errors.Add("BranchId must be a positive integer.");
 
-            if (!string.IsNullOrWhiteSpace(dto.DeviceNumber) && dto.DeviceNumber.Length > 100)
-                errors.Add("DeviceNumber must be at most 100 characters.");
+            if (string.IsNullOrWhiteSpace(dto.DeviceNumber))
+                errors.Add("DeviceNumber is required.");
+            else if (dto.DeviceNumber.Length > 50)
+                errors.Add("DeviceNumber must be at most 50 characters.");
 
             if (!string.IsNullOrWhiteSpace(dto.Company) && dto.Company.Length > 100)
                 errors.Add("Company must be at most 100 characters.");
