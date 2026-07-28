@@ -10,10 +10,12 @@ namespace BeyadAmi.Server.Domain.Entities
 
         // Navigation
         public ICollection<DeviceType>? DeviceTypes { get; set; }
+        public ICollection<Device>? Devices { get; set; }
 
         public DeviceCategory()
         {
             DeviceTypes = new List<DeviceType>();
+            Devices = new List<Device>();
         }
     }
 }

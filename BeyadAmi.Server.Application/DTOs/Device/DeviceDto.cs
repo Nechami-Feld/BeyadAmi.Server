@@ -4,8 +4,7 @@ namespace BeyadAmi.Server.Application.DTOs.Device
     {
         public int DeviceId { get; set; }
         public string? DeviceNumber { get; set; }
-        public int DeviceTypeId { get; set; }
-        public string? DeviceTypeName { get; set; }
+        public int CategoryId { get; set; }
         public string? CategoryName { get; set; }
         public int BranchId { get; set; }
         public string? BranchName { get; set; }

@@ -35,7 +35,7 @@ namespace BeyadAmi.Server.Application.Services
 
             var entity = new Device
             {
-                DeviceTypeId = dto.DeviceTypeId,
+                CategoryId = dto.CategoryId,
                 BranchId = dto.BranchId,
                 DeviceNumber = dto.DeviceNumber,
                 Company = dto.Company,
@@ -54,7 +54,7 @@ namespace BeyadAmi.Server.Application.Services
             var existing = await _repository.GetByIdAsync(deviceId, cancellationToken)
                 ?? throw new DeviceNotFoundException(deviceId);
 
-            existing.DeviceTypeId = dto.DeviceTypeId;
+            existing.CategoryId = dto.CategoryId;
             existing.BranchId = dto.BranchId;
             existing.Company = dto.Company;
             existing.Notes = dto.Notes;
@@ -101,9 +101,8 @@ namespace BeyadAmi.Server.Application.Services
         {
             DeviceId = d.DeviceId,
             DeviceNumber = d.DeviceNumber,
-            DeviceTypeId = d.DeviceTypeId,
-            DeviceTypeName = d.DeviceType?.DeviceName,
-            CategoryName = d.DeviceType?.Category?.CategoryName,
+            CategoryId = d.CategoryId,
+            CategoryName = d.Category?.CategoryName,
             BranchId = d.BranchId,
             BranchName = d.Branch?.BranchName,
             Company = d.Company,

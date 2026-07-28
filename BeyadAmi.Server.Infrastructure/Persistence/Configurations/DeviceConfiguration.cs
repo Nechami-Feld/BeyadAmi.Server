@@ -25,9 +25,9 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             // Relationships
-            builder.HasOne(d => d.DeviceType)
-                .WithMany(dt => dt.Devices)
-                .HasForeignKey(d => d.DeviceTypeId)
+            builder.HasOne(d => d.Category)
+                .WithMany(c => c.Devices)
+                .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(d => d.Branch)

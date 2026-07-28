@@ -15,8 +15,8 @@ namespace BeyadAmi.Server.Application.Validators
 
             var errors = new List<string>();
 
-            if (dto.DeviceTypeId <= 0)
-                errors.Add("DeviceTypeId must be a positive integer.");
+            if (dto.CategoryId <= 0)
+                errors.Add("CategoryId must be a positive integer.");
 
             if (dto.BranchId <= 0)
                 errors.Add("BranchId must be a positive integer.");

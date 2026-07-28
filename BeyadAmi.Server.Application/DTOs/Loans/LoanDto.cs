@@ -7,7 +7,6 @@ namespace BeyadAmi.Server.Application.DTOs.Loans
         public int LoanId { get; set; }
         public int DeviceId { get; set; }
         public string? DeviceNumber { get; set; }
-        public string? DeviceTypeName { get; set; }
         public string? BranchName { get; set; }
         public string? BorrowerFirstName { get; set; }
         public string? BorrowerLastName { get; set; }

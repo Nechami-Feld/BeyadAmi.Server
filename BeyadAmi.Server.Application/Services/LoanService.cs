@@ -113,7 +113,6 @@ namespace BeyadAmi.Server.Application.Services
             LoanId = l.LoanId,
             DeviceId = l.DeviceId,
             DeviceNumber = l.Device?.DeviceNumber,
-            DeviceTypeName = l.Device?.DeviceType?.DeviceName,
             BranchName = l.Device?.Branch?.BranchName,
             BorrowerFirstName = l.FirstName,
             BorrowerLastName = l.LastName,

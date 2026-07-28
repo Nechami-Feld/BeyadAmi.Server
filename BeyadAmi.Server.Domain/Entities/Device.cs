@@ -7,7 +7,7 @@ namespace BeyadAmi.Server.Domain.Entities
     public class Device
     {
         public int DeviceId { get; set; }
-        public int DeviceTypeId { get; set; }
+        public int CategoryId { get; set; }
         public int BranchId { get; set; }
         public string? DeviceNumber { get; set; }
         public string? Company { get; set; }
@@ -15,7 +15,7 @@ namespace BeyadAmi.Server.Domain.Entities
         public DateTime CreatedDate { get; set; }
 
         // Navigation
-        public DeviceType? DeviceType { get; set; }
+        public DeviceCategory? Category { get; set; }
         public Branch? Branch { get; set; }
         public ICollection<Loan>? Loans { get; set; }
 

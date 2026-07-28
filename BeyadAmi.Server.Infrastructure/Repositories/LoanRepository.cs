@@ -22,7 +22,6 @@ namespace BeyadAmi.Server.Infrastructure.Repositories
         {
             return await _db.Loans
                 .Include(l => l.Device)
-                    .ThenInclude(d => d!.DeviceType)
                         .ThenInclude(dt => dt!.Category)
                 .Include(l => l.Device)
                     .ThenInclude(d => d!.Branch)
@@ -35,7 +34,6 @@ namespace BeyadAmi.Server.Infrastructure.Repositories
         {
             return await _db.Loans
                 .Include(l => l.Device)
-                    .ThenInclude(d => d!.DeviceType)
                         .ThenInclude(dt => dt!.Category)
                 .Include(l => l.Device)
                     .ThenInclude(d => d!.Branch)
@@ -48,7 +46,6 @@ namespace BeyadAmi.Server.Infrastructure.Repositories
         {
             return await _db.Loans
                 .Include(l => l.Device)
-                    .ThenInclude(d => d!.DeviceType)
                         .ThenInclude(dt => dt!.Category)
                 .Include(l => l.Device)
                     .ThenInclude(d => d!.Branch)

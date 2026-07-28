@@ -24,6 +24,11 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
                 .HasForeignKey(dt => dt.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasMany(dc => dc.Devices)
+                .WithOne(d => d.Category)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasIndex(dc => dc.CategoryName).HasDatabaseName("IX_DeviceCategories_CategoryName");
         }
     }
