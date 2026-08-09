@@ -8,6 +8,7 @@ namespace BeyadAmi.Server.Domain.Entities
         public string? ProductName { get; set; }
         public string? Model { get; set; }
         public string? Company { get; set; }
+        public string? Notes { get; set; }
 
         // Navigation
         public ICollection<StoreProduct>? StoreProducts { get; set; }

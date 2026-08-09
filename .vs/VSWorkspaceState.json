@@ -1,8 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\BeyadAmi.Server.Infrastructure"
+    "\\BeyadAmi.Server.Domain",
+    "\\BeyadAmi.Server.Domain\\Entities"
   ],
-  "SelectedNode": "\\BeyadAmi.Server.Domain",
   "PreviewInSolutionExplorer": false
 }
