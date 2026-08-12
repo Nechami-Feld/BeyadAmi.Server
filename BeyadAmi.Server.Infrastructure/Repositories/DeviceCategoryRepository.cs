@@ -21,7 +21,6 @@ namespace BeyadAmi.Server.Infrastructure.Repositories
         public async Task<DeviceCategory?> GetByIdAsync(int categoryId, CancellationToken cancellationToken = default)
         {
             return await _db.DeviceCategories
-                .Include(c => c.DeviceTypes)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.CategoryId == categoryId, cancellationToken);
         }

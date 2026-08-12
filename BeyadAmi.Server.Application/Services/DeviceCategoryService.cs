@@ -91,7 +91,6 @@ namespace BeyadAmi.Server.Application.Services
             CategoryId = c.CategoryId,
             CategoryName = c.CategoryName,
             Description = c.Description,
-            DeviceTypesCount = c.DeviceTypes?.Count ?? 0
         };
     }
 }

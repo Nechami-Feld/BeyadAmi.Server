@@ -19,11 +19,7 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
                 .HasMaxLength(1000)
                 .HasColumnType("nvarchar(1000)");
 
-            builder.HasMany(dc => dc.DeviceTypes)
-                .WithOne(dt => dt.Category)
-                .HasForeignKey(dt => dt.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+            
             builder.HasMany(dc => dc.Devices)
                 .WithOne(d => d.Category)
                 .HasForeignKey(d => d.CategoryId)
