@@ -35,6 +35,7 @@ namespace BeyadAmi.Server.Application.Services
                 StoreName = dto.StoreName ?? string.Empty,
                 Address = dto.Address,
                 Phone = dto.Phone,
+                Email = dto.Email,
                 Notes = dto.Notes
             };
 
@@ -55,6 +56,7 @@ namespace BeyadAmi.Server.Application.Services
             existing.StoreName = dto.StoreName;
             existing.Address = dto.Address;
             existing.Phone = dto.Phone;
+            existing.Email = dto.Email;
             existing.Notes = dto.Notes;
 
             _repository.Update(existing);
@@ -92,6 +94,7 @@ namespace BeyadAmi.Server.Application.Services
             StoreName = s.StoreName,
             Address = s.Address,
             Phone = s.Phone,
+            Email = s.Email,
             Notes = s.Notes,
             ProductsCount = s.StoreProducts?.Count ?? 0
         };

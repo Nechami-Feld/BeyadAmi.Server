@@ -8,6 +8,7 @@ namespace BeyadAmi.Server.Application.Validators
     public class CreateStoreValidator
     {
         private static readonly Regex PhoneRegex = new(@"^[0-9+\-\s()]{7,20}$", RegexOptions.Compiled);
+        private static readonly Regex EmailRegex = new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
 
         public IEnumerable<string> Validate(CreateStoreDto dto)
         {
@@ -24,6 +25,9 @@ namespace BeyadAmi.Server.Application.Validators
 
             if (!string.IsNullOrWhiteSpace(dto.Phone) && !PhoneRegex.IsMatch(dto.Phone))
                 errors.Add("Phone format is invalid.");
+
+            if (!string.IsNullOrWhiteSpace(dto.Email) && !EmailRegex.IsMatch(dto.Email))
+                errors.Add("Email format is invalid.");
 
             return errors;
         }

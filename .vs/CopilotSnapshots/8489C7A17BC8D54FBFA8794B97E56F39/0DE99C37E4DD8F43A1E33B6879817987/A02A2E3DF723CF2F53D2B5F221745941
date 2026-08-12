@@ -1,0 +1,18 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=BeyadAmi;Trusted_Connection=True;TrustServerCertificate=True"
+  }
+  ,
+  "Jwt": {
+    "Key": "dev_secret_change_me",
+    "Issuer": "BeyadAmi.Api",
+    "Audience": "BeyadAmi.Client",
+    "ExpirationMinutes": 60
+  }
+}
