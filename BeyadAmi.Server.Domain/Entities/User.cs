@@ -10,5 +10,8 @@ namespace BeyadAmi.Server.Domain.Entities
         public string? PasswordHash { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Role of the user. Default is User.
+        public UserRole Role { get; set; } = UserRole.User;
     }
 }

@@ -38,6 +38,7 @@ namespace BeyadAmi.Server.Application.Services
             {
                 UserName = dto.UserName,
                 Email = dto.Email,
+                Role = Domain.Entities.UserRole.User,
                 PasswordHash = passwordHash,
                 IsActive = true,
                 CreatedAt = System.DateTime.UtcNow
@@ -76,6 +77,8 @@ namespace BeyadAmi.Server.Application.Services
                 ExpiresAt = expiresAt,
                 UserId = user.UserId,
                 UserName = user.UserName
+                ,
+                Role = user.Role.ToString()
             };
         }
     }

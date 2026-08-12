@@ -2,6 +2,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using BeyadAmi.Server.Application.DTOs.Authentication;
 using BeyadAmi.Server.Application.Interfaces.Services;
 
@@ -16,6 +18,37 @@ namespace BeyadAmi.Server.Api.Controllers
         public AuthController(IAuthenticationService authService)
         {
             _authService = authService;
+        }
+
+        /// <summary>
+        /// Returns current authenticated user info.
+        /// </summary>
+        [HttpGet("me")]
+        [Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public ActionResult<object> Me()
+        {
+            var userId = User.FindFirst("userId")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userName = User.FindFirst("userName")?.Value ?? User.Identity?.Name;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value ?? User.FindFirst("role")?.Value;
+
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            return Ok(new { UserId = int.Parse(userId), UserName = userName, Role = role });
+        }
+
+        /// <summary>
+        /// Admin test endpoint. Intended for testing only.
+        /// </summary>
+        [HttpGet("admin-test")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        public ActionResult AdminTest()
+        {
+            return Ok();
         }
 
         /// <summary>

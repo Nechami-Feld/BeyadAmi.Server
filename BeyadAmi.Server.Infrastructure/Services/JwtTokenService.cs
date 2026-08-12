@@ -27,12 +27,16 @@ namespace BeyadAmi.Server.Infrastructure.Services
 
             var expires = DateTime.UtcNow.AddMinutes(_options.ExpirationMinutes > 0 ? _options.ExpirationMinutes : 60);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty),
                 new Claim("userId", user.UserId.ToString()),
-                new Claim("userName", user.UserName ?? string.Empty)
+                new Claim("userName", user.UserName ?? string.Empty),
+                // Add role claim so [Authorize(Roles = "...")] works
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                // also add 'role' claim commonly used in JWTs
+                new Claim("role", user.Role.ToString())
             };
 
             var token = new JwtSecurityToken(
