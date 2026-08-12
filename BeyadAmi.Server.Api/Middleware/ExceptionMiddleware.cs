@@ -46,6 +46,11 @@ namespace BeyadAmi.Server.Api.Middleware
                     statusCode = (int)HttpStatusCode.Unauthorized;
                     message = "Invalid credentials.";
                 }
+                else if (ex is BeyadAmi.Server.Application.Exceptions.UserAlreadyExistsException || exTypeName == "UserAlreadyExistsException")
+                {
+                    statusCode = (int)HttpStatusCode.Conflict;
+                    message = ex.Message;
+                }
                 else if (ex is BusinessException || exTypeName.Contains("AlreadyExists") || ex is BranchHasDevicesException)
                 {
                     statusCode = (int)HttpStatusCode.BadRequest;

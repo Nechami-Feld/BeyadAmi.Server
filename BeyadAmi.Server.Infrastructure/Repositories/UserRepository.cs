@@ -22,5 +22,23 @@ namespace BeyadAmi.Server.Infrastructure.Repositories
             return await _db.Set<User>().AsNoTracking()
                 .SingleOrDefaultAsync(u => u.UserName == userName, cancellationToken);
         }
+
+        public async Task<bool> ExistsByUserNameAsync(string userName, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(userName)) return false;
+            return await _db.Set<User>().AnyAsync(u => u.UserName == userName, cancellationToken);
+        }
+
+        public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return false;
+            return await _db.Set<User>().AnyAsync(u => u.Email == email, cancellationToken);
+        }
+
+        public async Task AddAsync(User user, CancellationToken cancellationToken = default)
+        {
+            await _db.Set<User>().AddAsync(user, cancellationToken);
+            await _db.SaveChangesAsync(cancellationToken);
+        }
     }
 }

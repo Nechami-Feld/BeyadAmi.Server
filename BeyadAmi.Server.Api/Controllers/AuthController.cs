@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using BeyadAmi.Server.Application.DTOs.Authentication;
 using BeyadAmi.Server.Application.Interfaces.Services;
@@ -30,6 +31,21 @@ namespace BeyadAmi.Server.Api.Controllers
 
             var result = await _authService.LoginAsync(dto, cancellationToken);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Register a new user.
+        /// </summary>
+        [HttpPost("register")]
+        [ProducesResponseType(typeof(RegisterResponseDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public async Task<ActionResult<RegisterResponseDto>> Register([FromBody] RegisterRequestDto dto, CancellationToken cancellationToken = default)
+        {
+            if (dto == null) return BadRequest("Request body is required.");
+
+            var result = await _authService.RegisterAsync(dto, cancellationToken);
+            return Created(string.Empty, result);
         }
     }
 }

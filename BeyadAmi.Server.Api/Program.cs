@@ -4,6 +4,7 @@ using BeyadAmi.Server.Application.Services;
 using BeyadAmi.Server.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 using BeyadAmi.Server.Application.Settings;
 
@@ -31,11 +32,36 @@ if (jwtOptions != null)
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtOptions.Issuer,
                 ValidAudience = jwtOptions.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key ?? string.Empty))
+                IssuerSigningKey = new SymmetricSecurityKey(GetJwtKeyBytes(jwtOptions.Key))
             };
         });
 
     builder.Services.AddAuthorization();
+}
+
+static byte[] GetJwtKeyBytes(string? key)
+{
+    if (string.IsNullOrWhiteSpace(key))
+        throw new InvalidOperationException("JWT configuration error: 'Jwt:Key' is not set.");
+
+    // Try to interpret the key as base64 first (recommended for binary secrets)
+    try
+    {
+        var base64 = Convert.FromBase64String(key);
+        if (base64.Length >= 32) // 256 bits == 32 bytes
+            return base64;
+        // if base64 decoded but too short, fall through to try UTF8
+    }
+    catch
+    {
+        // not base64, will treat as UTF8 string
+    }
+
+    var utf8 = Encoding.UTF8.GetBytes(key);
+    if (utf8.Length < 32)
+        throw new InvalidOperationException("JWT key size is too small. HS256 requires a key of at least 256 bits (32 bytes). Provide a longer secret or a base64-encoded 32+ byte key.");
+
+    return utf8;
 }
 
 builder.Services.AddControllers();

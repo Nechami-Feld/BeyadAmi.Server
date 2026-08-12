@@ -13,6 +13,8 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
             builder.Property(u => u.UserId).ValueGeneratedOnAdd();
             builder.Property(u => u.UserName).HasMaxLength(100).IsRequired();
             builder.Property(u => u.Email).HasMaxLength(200);
+            builder.HasIndex(u => u.UserName).IsUnique();
+            builder.HasIndex(u => u.Email).IsUnique();
             builder.Property(u => u.PasswordHash).HasMaxLength(500);
             builder.Property(u => u.IsActive).IsRequired();
             builder.Property(u => u.CreatedAt).IsRequired();

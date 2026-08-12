@@ -21,6 +21,38 @@ namespace BeyadAmi.Server.Application.Services
             _jwtTokenService = jwtTokenService;
         }
 
+        public async Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto dto, CancellationToken cancellationToken = default)
+        {
+            if (dto == null) throw new System.ArgumentNullException(nameof(dto));
+
+            // Basic checks
+            if (await _userRepository.ExistsByUserNameAsync(dto.UserName ?? string.Empty, cancellationToken))
+                throw new UserAlreadyExistsException();
+
+            if (await _userRepository.ExistsByEmailAsync(dto.Email ?? string.Empty, cancellationToken))
+                throw new UserAlreadyExistsException();
+
+            var passwordHash = _passwordHasher.Hash(dto.Password ?? string.Empty);
+
+            var user = new Domain.Entities.User
+            {
+                UserName = dto.UserName,
+                Email = dto.Email,
+                PasswordHash = passwordHash,
+                IsActive = true,
+                CreatedAt = System.DateTime.UtcNow
+            };
+
+            await _userRepository.AddAsync(user, cancellationToken);
+
+            return new RegisterResponseDto
+            {
+                UserId = user.UserId,
+                UserName = user.UserName,
+                Email = user.Email
+            };
+        }
+
         public async Task<LoginResponseDto> LoginAsync(LoginRequestDto dto, CancellationToken cancellationToken = default)
         {
             if (dto == null) throw new System.ArgumentNullException(nameof(dto));

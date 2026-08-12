@@ -44,6 +44,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateLoanValidator>();
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreatePurchaseValidator>();
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateProductValidator>();
+            services.AddScoped<BeyadAmi.Server.Application.Validators.RegisterRequestValidator>();
 
             // Register application services here so the Api project only needs to call infrastructure registration
             services.AddScoped<IBranchService, BranchService>();
