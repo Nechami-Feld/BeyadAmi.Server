@@ -7,6 +7,9 @@ using BeyadAmi.Server.Application.Interfaces.Repositories;
 using BeyadAmi.Server.Infrastructure.Repositories;
 using BeyadAmi.Server.Application.Interfaces.Services;
 using BeyadAmi.Server.Application.Services;
+using BeyadAmi.Server.Application.Interfaces;
+using BeyadAmi.Server.Infrastructure.Security;
+using BeyadAmi.Server.Infrastructure.Services;
 
 namespace BeyadAmi.Server.Infrastructure.Extensions
 {
@@ -25,6 +28,12 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<ILoanRepository, LoanRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            // Authentication related
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IJwtTokenService, JwtTokenService>();
 
             // Validators
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateBranchValidator>();

@@ -2,6 +2,10 @@ using BeyadAmi.Server.Application.Interfaces.Repositories;
 using BeyadAmi.Server.Application.Interfaces.Services;
 using BeyadAmi.Server.Application.Services;
 using BeyadAmi.Server.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using BeyadAmi.Server.Application.Settings;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +13,30 @@ var builder = WebApplication.CreateBuilder(args);
 // Register infrastructure and application services via extension methods
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddHttpClient<IAddressService, AddressService>();
+
+// JWT configuration
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtOptions = jwtSection.Get<JwtOptions>();
+if (jwtOptions != null)
+{
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtOptions.Issuer,
+                ValidAudience = jwtOptions.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key ?? string.Empty))
+            };
+        });
+
+    builder.Services.AddAuthorization();
+}
 
 builder.Services.AddControllers();
 
@@ -22,7 +50,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-            .WithOrigins("http://localhost:4200")
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
         });
@@ -40,9 +68,11 @@ if (app.Environment.IsDevelopment())
 // Global exception handling middleware - must be before controllers
 app.UseMiddleware<BeyadAmi.Server.Api.Middleware.ExceptionMiddleware>();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.UseCors("Angular");
-//app.UseAuthorization();
 
 app.Run();

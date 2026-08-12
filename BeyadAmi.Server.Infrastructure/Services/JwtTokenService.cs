@@ -1,0 +1,50 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using BeyadAmi.Server.Application.Interfaces;
+using BeyadAmi.Server.Application.Settings;
+using BeyadAmi.Server.Domain.Entities;
+
+namespace BeyadAmi.Server.Infrastructure.Services
+{
+    public class JwtTokenService : IJwtTokenService
+    {
+        private readonly JwtOptions _options;
+
+        public JwtTokenService(IOptions<JwtOptions> options)
+        {
+            _options = options.Value;
+        }
+
+        public Task<(string token, DateTime expiresAt)> CreateTokenAsync(User user)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key ?? string.Empty));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var expires = DateTime.UtcNow.AddMinutes(_options.ExpirationMinutes > 0 ? _options.ExpirationMinutes : 60);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty),
+                new Claim("userId", user.UserId.ToString()),
+                new Claim("userName", user.UserName ?? string.Empty)
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: _options.Issuer,
+                audience: _options.Audience,
+                claims: claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            return Task.FromResult<(string, DateTime)>((tokenString, expires));
+        }
+    }
+}
