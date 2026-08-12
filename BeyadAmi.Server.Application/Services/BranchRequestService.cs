@@ -33,7 +33,8 @@ namespace BeyadAmi.Server.Application.Services
             var entity = new BranchRequest
             {
                 BranchId = dto.BranchId,
-                RequestDate = dto.RequestDate ?? DateTime.UtcNow,
+                Request = dto.Request,
+                // RequestDate is set in the entity constructor to DateTime.UtcNow
                 Notes = dto.Notes,
                 IsCompleted = false
             };
@@ -49,12 +50,16 @@ namespace BeyadAmi.Server.Application.Services
             var existing = await _repository.GetByIdAsync(id, cancellationToken)
                 ?? throw new BranchRequestNotFoundException(id);
 
+            if (dto.Request == null)
+                throw new BusinessException("Request is required.");
+
             if (dto.IsCompleted && dto.CompletedDate == null)
                 throw new BusinessException("CompletedDate is required when IsCompleted is true.");
 
             if (!dto.IsCompleted && dto.CompletedDate != null)
                 throw new BusinessException("CompletedDate can only be set when IsCompleted is true.");
 
+            existing.Request = dto.Request;
             existing.IsCompleted = dto.IsCompleted;
             existing.CompletedDate = dto.IsCompleted ? dto.CompletedDate : null;
             existing.Notes = dto.Notes;
@@ -93,6 +98,7 @@ namespace BeyadAmi.Server.Application.Services
             RequestId = r.RequestId,
             BranchId = r.BranchId,
             BranchName = r.Branch?.BranchName,
+            Request = r.Request,
             RequestDate = r.RequestDate,
             IsCompleted = r.IsCompleted,
             CompletedDate = r.CompletedDate,

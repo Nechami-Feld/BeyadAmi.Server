@@ -16,6 +16,12 @@ namespace BeyadAmi.Server.Application.Validators
             if (dto.BranchId <= 0)
                 errors.Add("BranchId is required.");
 
+            if (dto.Request is null)
+                errors.Add("Request is required.");
+
+            if (dto.Request != null && dto.Request.Length > 500)
+                errors.Add("Request must not exceed 500 characters.");
+
             if (dto.Notes != null && dto.Notes.Length > 500)
                 errors.Add("Notes must not exceed 500 characters.");
 

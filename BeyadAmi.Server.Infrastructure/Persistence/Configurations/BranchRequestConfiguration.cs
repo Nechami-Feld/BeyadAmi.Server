@@ -14,6 +14,11 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
             builder.HasKey(br => br.RequestId);
 
             // Properties
+
+            builder.Property(br => br.Request)
+                .IsRequired()
+                .HasMaxLength(1000);
+
             builder.Property(br => br.RequestDate)
                 .IsRequired();
 
