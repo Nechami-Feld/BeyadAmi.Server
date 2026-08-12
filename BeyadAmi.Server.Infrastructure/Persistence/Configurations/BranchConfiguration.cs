@@ -25,8 +25,7 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
             builder.Property(b => b.Apartment)
                 .HasMaxLength(20);
 
-            builder.Property(b => b.ManagerLastName)
-                .HasMaxLength(100);
+           
 
             builder.Property(b => b.Phone)
                 .HasColumnType("varchar(20)")

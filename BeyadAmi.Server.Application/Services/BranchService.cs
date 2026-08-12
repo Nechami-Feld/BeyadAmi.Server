@@ -37,7 +37,6 @@ namespace BeyadAmi.Server.Application.Services
                 City = dto.City,
                 Street = dto.Street,
                 Apartment = dto.Apartment,
-                ManagerLastName = dto.ManagerLastName,
                 Phone = dto.Phone,
                 Email = dto.Email,
                 Notes = dto.Notes,
@@ -63,7 +62,6 @@ namespace BeyadAmi.Server.Application.Services
             existing.City = dto.City;
             existing.Street = dto.Street;
             existing.Apartment = dto.Apartment;
-            existing.ManagerLastName = dto.ManagerLastName;
             existing.Phone = dto.Phone;
             existing.Email = dto.Email;
             existing.Notes = dto.Notes;
@@ -110,7 +108,6 @@ namespace BeyadAmi.Server.Application.Services
             City = b.City,
             Street = b.Street,
             Apartment = b.Apartment,
-            ManagerLastName = b.ManagerLastName,
             Phone = b.Phone,
             Email = b.Email,
             Notes = b.Notes,
