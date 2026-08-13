@@ -12,9 +12,6 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
 
             builder.HasKey(l => l.LoanId);
 
-            builder.Property(l => l.FirstName)
-                .HasMaxLength(100);
-
             builder.Property(l => l.LastName)
                 .HasMaxLength(100);
 
@@ -24,9 +21,6 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
             builder.Property(l => l.Phone)
                 .HasColumnType("varchar(20)")
                 .HasMaxLength(20);
-
-            builder.Property(l => l.DepositAmount)
-                .HasColumnType("decimal(18,2)");
 
             builder.Property(l => l.LoanDate)
                 .IsRequired();

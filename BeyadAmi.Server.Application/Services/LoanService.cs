@@ -40,18 +40,13 @@ namespace BeyadAmi.Server.Application.Services
             if (await _repository.HasActiveLoanAsync(dto.DeviceId, cancellationToken))
                 throw new DeviceAlreadyLoanedException(dto.DeviceId);
 
-            if (dto.DepositTypeId != DepositTypeNoneId && (dto.DepositAmount == null || dto.DepositAmount <= 0))
-                throw new InvalidDepositException();
-
             var entity = new Loan
             {
                 DeviceId = dto.DeviceId,
-                FirstName = dto.BorrowerFirstName,
                 LastName = dto.BorrowerLastName,
                 Address = dto.Address,
                 Phone = dto.Phone,
                 DepositTypeId = dto.DepositTypeId,
-                DepositAmount = dto.DepositAmount,
                 LoanDate = DateTime.UtcNow,
                 Notes = dto.Notes
             };
@@ -114,13 +109,11 @@ namespace BeyadAmi.Server.Application.Services
             DeviceId = l.DeviceId,
             DeviceNumber = l.Device?.DeviceNumber,
             BranchName = l.Device?.Branch?.BranchName,
-            BorrowerFirstName = l.FirstName,
             BorrowerLastName = l.LastName,
             Address = l.Address,
             Phone = l.Phone,
             DepositTypeId = l.DepositTypeId,
             DepositTypeName = l.DepositType?.DepositTypeName,
-            DepositAmount = l.DepositAmount,
             LoanDate = l.LoanDate,
             ReturnDate = l.ReturnDate,
             IsActive = l.IsActive,

@@ -29,6 +29,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDepositTypeRepository, DepositTypeRepository>();
 
             // Authentication related
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -55,6 +56,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<ILoanService, LoanService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IDepositTypeService, DepositTypeService>();
 
             return services;
         }
