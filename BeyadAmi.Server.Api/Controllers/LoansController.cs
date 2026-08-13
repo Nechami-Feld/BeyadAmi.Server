@@ -97,6 +97,32 @@ namespace BeyadAmi.Server.Api.Controllers
         }
 
         /// <summary>
+        /// Update a loan
+        /// </summary>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateLoanDto dto, CancellationToken cancellationToken = default)
+        {
+            if (dto == null)
+                return BadRequest("Request body is required.");
+
+            // basic validation
+            if (string.IsNullOrWhiteSpace(dto.BorrowerLastName))
+                return BadRequest(new { Errors = new[] { "BorrowerLastName is required." } });
+
+            if (string.IsNullOrWhiteSpace(dto.Phone))
+                return BadRequest(new { Errors = new[] { "Phone is required." } });
+
+            if (dto.DepositTypeId <= 0)
+                return BadRequest(new { Errors = new[] { "DepositTypeId is required." } });
+
+            await _service.UpdateAsync(id, dto, cancellationToken);
+            return Ok();
+        }
+
+        /// <summary>
         /// Delete a loan
         /// </summary>
         [HttpDelete("{id:int}")]

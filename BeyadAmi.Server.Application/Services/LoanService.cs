@@ -68,6 +68,31 @@ namespace BeyadAmi.Server.Application.Services
             _repository.Update(existing);
         }
 
+        public async Task UpdateAsync(int loanId, UpdateLoanDto dto, CancellationToken cancellationToken = default)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            var existing = await _repository.GetByIdAsync(loanId, cancellationToken)
+                ?? throw new LoanNotFoundException(loanId);
+
+            if (string.IsNullOrWhiteSpace(dto.BorrowerLastName))
+                throw new BusinessException("BorrowerLastName is required.");
+
+            if (string.IsNullOrWhiteSpace(dto.Phone))
+                throw new BusinessException("Phone is required.");
+
+            if (dto.DepositTypeId <= 0)
+                throw new BusinessException("DepositTypeId is required.");
+
+            existing.LastName = dto.BorrowerLastName;
+            existing.Address = dto.Address;
+            existing.Phone = dto.Phone;
+            existing.DepositTypeId = dto.DepositTypeId;
+            existing.Notes = dto.Notes ?? existing.Notes;
+
+            _repository.Update(existing);
+        }
+
         public async Task DeleteAsync(int loanId, CancellationToken cancellationToken = default)
         {
             var existing = await _repository.GetByIdAsync(loanId, cancellationToken);
