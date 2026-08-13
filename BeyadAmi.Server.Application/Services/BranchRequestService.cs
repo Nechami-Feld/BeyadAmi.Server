@@ -98,6 +98,8 @@ namespace BeyadAmi.Server.Application.Services
             RequestId = r.RequestId,
             BranchId = r.BranchId,
             BranchName = r.Branch?.BranchName,
+            City = r.Branch?.City,
+            Street = r.Branch?.Street,
             Request = r.Request,
             RequestDate = r.RequestDate,
             IsCompleted = r.IsCompleted,
