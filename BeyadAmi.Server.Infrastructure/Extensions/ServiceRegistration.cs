@@ -6,6 +6,7 @@ using BeyadAmi.Server.Infrastructure.Persistence;
 using BeyadAmi.Server.Application.Interfaces.Repositories;
 using BeyadAmi.Server.Infrastructure.Repositories;
 using BeyadAmi.Server.Application.Interfaces.Services;
+using BeyadAmi.Server.Infrastructure.Repositories;
 using BeyadAmi.Server.Application.Services;
 using BeyadAmi.Server.Application.Interfaces;
 using BeyadAmi.Server.Infrastructure.Security;
@@ -57,6 +58,9 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IDepositTypeService, DepositTypeService>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<BeyadAmi.Server.Application.Validators.CreateCompanyValidator>();
 
             return services;
         }

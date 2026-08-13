@@ -26,6 +26,7 @@ namespace BeyadAmi.Server.Infrastructure.Persistence
         public DbSet<SurveyQuestion> SurveyQuestions { get; set; }
         public DbSet<SurveySending> SurveySendings { get; set; }
         public DbSet<SurveyAnswer> SurveyAnswers { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
