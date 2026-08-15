@@ -53,15 +53,17 @@ namespace BeyadAmi.Server.Application.Services
             if (dto.Request == null)
                 throw new BusinessException("Request is required.");
 
-            if (dto.IsCompleted && dto.CompletedDate == null)
-                throw new BusinessException("CompletedDate is required when IsCompleted is true.");
-
-            if (!dto.IsCompleted && dto.CompletedDate != null)
-                throw new BusinessException("CompletedDate can only be set when IsCompleted is true.");
+            if(!existing.IsCompleted && dto.IsCompleted)
+            {
+                existing.CompletedDate = DateTime.Now;
+            }
+            if (existing.IsCompleted && !dto.IsCompleted)
+            {
+                existing.CompletedDate = null;
+            }
 
             existing.Request = dto.Request;
             existing.IsCompleted = dto.IsCompleted;
-            existing.CompletedDate = dto.IsCompleted ? dto.CompletedDate : null;
             existing.Notes = dto.Notes;
 
             _repository.Update(existing);
