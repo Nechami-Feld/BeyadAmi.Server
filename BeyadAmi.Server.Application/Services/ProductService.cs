@@ -108,8 +108,7 @@ namespace BeyadAmi.Server.Application.Services
             ProductName = p.ProductName,
             Model = p.Model,
             Company = p.Company,
-            Notes = p.Notes,
-            PurchasesCount = p.Purchases?.Count ?? 0
+            Notes = p.Notes
         };
     }
 }
