@@ -33,6 +33,7 @@ namespace BeyadAmi.Server.Application.Services
             var entity = new Store
             {
                 StoreName = dto.StoreName ?? string.Empty,
+                IsActive = dto.IsActive,
                 Address = dto.Address,
                 Phone = dto.Phone,
                 Email = dto.Email,
@@ -53,6 +54,7 @@ namespace BeyadAmi.Server.Application.Services
             if (string.IsNullOrWhiteSpace(dto.StoreName))
                 throw new BusinessException("StoreName is required.");
 
+            existing.IsActive = dto.IsActive;
             existing.StoreName = dto.StoreName;
             existing.Address = dto.Address;
             existing.Phone = dto.Phone;
@@ -92,6 +94,7 @@ namespace BeyadAmi.Server.Application.Services
         {
             StoreId = s.StoreId,
             StoreName = s.StoreName,
+            IsActive = s.IsActive,
             Address = s.Address,
             Phone = s.Phone,
             Email = s.Email,
