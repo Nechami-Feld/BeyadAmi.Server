@@ -29,8 +29,7 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(br => br.Notes)
-                .HasColumnType("nvarchar(max)");
-
+                .HasColumnType("text");
             // Relationships
             builder.HasOne(br => br.Branch)
                 .WithMany(b => b.BranchRequests)

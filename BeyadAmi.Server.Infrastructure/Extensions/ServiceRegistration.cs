@@ -1,16 +1,14 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
 using BeyadAmi.Server.Infrastructure.Persistence;
 using BeyadAmi.Server.Application.Interfaces.Repositories;
 using BeyadAmi.Server.Infrastructure.Repositories;
 using BeyadAmi.Server.Application.Interfaces.Services;
-using BeyadAmi.Server.Infrastructure.Repositories;
 using BeyadAmi.Server.Application.Services;
 using BeyadAmi.Server.Application.Interfaces;
 using BeyadAmi.Server.Infrastructure.Security;
-using BeyadAmi.Server.Infrastructure.Services;
+using BeyadAmi.Server.Infrastructure.Services;  
 
 namespace BeyadAmi.Server.Infrastructure.Extensions
 {
@@ -19,9 +17,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddScoped<IBranchRepository, BranchRepository>();
+     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))); services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<IStoreRepository, StoreRepository>();
             services.AddScoped<IDeviceCategoryRepository, DeviceCategoryRepository>();

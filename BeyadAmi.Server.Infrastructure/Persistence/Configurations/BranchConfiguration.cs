@@ -35,7 +35,7 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
                 .HasMaxLength(150);
 
             builder.Property(b => b.Notes)
-                .HasColumnType("nvarchar(max)");
+                .HasColumnType("text");
 
             builder.Property(b => b.IsActive)
                 .IsRequired();

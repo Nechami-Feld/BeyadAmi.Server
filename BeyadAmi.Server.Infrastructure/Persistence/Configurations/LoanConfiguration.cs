@@ -26,7 +26,7 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(l => l.Notes)
-                .HasColumnType("nvarchar(max)");
+                .HasColumnType("text");
 
             // Relationships
             builder.HasOne(l => l.Device)

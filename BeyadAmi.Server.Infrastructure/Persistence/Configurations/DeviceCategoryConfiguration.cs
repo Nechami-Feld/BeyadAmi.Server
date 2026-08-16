@@ -17,9 +17,9 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
 
             builder.Property(dc => dc.Description)
                 .HasMaxLength(1000)
-                .HasColumnType("nvarchar(1000)");
+                    .HasColumnType("text");
 
-            
+
             builder.HasMany(dc => dc.Devices)
                 .WithOne(d => d.Category)
                 .HasForeignKey(d => d.CategoryId)

@@ -1,6 +1,7 @@
+using BeyadAmi.Server.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using BeyadAmi.Server.Domain.Entities;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
 {
@@ -19,7 +20,7 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
                 .HasMaxLength(100);
 
             builder.Property(d => d.Notes)
-                .HasColumnType("nvarchar(max)");
+                .HasColumnType("text");
 
             builder.Property(d => d.CreatedDate)
                 .IsRequired();
