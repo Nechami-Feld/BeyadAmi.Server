@@ -44,6 +44,9 @@ ScaffoldingReadMe.txt
 *~
 CodeCoverage/
 
+# Visual Studio
+.vs/
+
 # MSBuild Binary and Structured Log
 *.binlog
 
@@ -64,3 +67,4 @@ nunit-*.xml
 /.vs/BeyadAmi.Server/v17/.wsuo
 /.vs/BeyadAmi.Server/v17/.suo
 /.vs/ProjectEvaluation
+/.vs/BeyadAmi.Server/copilot-chat/596c6fad/sessions/a1c78984-c87b-4fd5-bfa8-794b97e56f39
