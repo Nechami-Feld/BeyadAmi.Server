@@ -13,18 +13,18 @@ namespace BeyadAmi.Server.Application.Validators
         public IEnumerable<string> Validate(CreateBranchDto dto)
         {
             if (dto == null)
-                return new[] { "Branch payload is required." };
+                return new[] { "נדרש מידע לסניף." };
 
             var errors = new List<string>();
 
             if (string.IsNullOrWhiteSpace(dto.BranchName))
-                errors.Add("BranchName is required.");
+                errors.Add("שם הסניף הוא שדה חובה.");
 
             if (!string.IsNullOrWhiteSpace(dto.Email) && !EmailRegex.IsMatch(dto.Email))
-                errors.Add("Email format is invalid.");
+                errors.Add("כתובת האימייל אינה תקינה.");
 
             if (!string.IsNullOrWhiteSpace(dto.Phone) && !PhoneRegex.IsMatch(dto.Phone))
-                errors.Add("Phone format is invalid.");
+                errors.Add("מספר הטלפון אינו תקין.");
 
             return errors;
         }

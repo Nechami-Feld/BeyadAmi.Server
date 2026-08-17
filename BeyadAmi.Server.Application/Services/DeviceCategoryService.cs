@@ -31,7 +31,7 @@ namespace BeyadAmi.Server.Application.Services
                 throw new BusinessException(string.Join(" ", errors));
 
             if (await _repository.ExistsByNameAsync(dto.CategoryName!, cancellationToken))
-                throw new BusinessException($"CategoryName '{dto.CategoryName}' already exists.");
+                throw new BusinessException($"שם הקטגוריה '{dto.CategoryName}' כבר קיים.");
 
             var entity = new DeviceCategory
             {
@@ -51,11 +51,11 @@ namespace BeyadAmi.Server.Application.Services
                 ?? throw new DeviceCategoryNotFoundException(categoryId);
 
             if (string.IsNullOrWhiteSpace(dto.CategoryName))
-                throw new BusinessException("CategoryName is required.");
+                throw new BusinessException("שם הקטגוריה הוא שדה חובה.");
 
             if (!string.Equals(existing.CategoryName, dto.CategoryName, StringComparison.OrdinalIgnoreCase)
                 && await _repository.ExistsByNameAsync(dto.CategoryName, cancellationToken))
-                throw new BusinessException($"CategoryName '{dto.CategoryName}' already exists.");
+                throw new BusinessException($"שם הקטגוריה '{dto.CategoryName}' כבר קיים.");
 
             existing.CategoryName = dto.CategoryName;
             existing.Description = dto.Description;

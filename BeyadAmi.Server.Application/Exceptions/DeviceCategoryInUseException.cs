@@ -3,7 +3,7 @@ namespace BeyadAmi.Server.Application.Exceptions
     public class DeviceCategoryInUseException : BusinessException
     {
         public DeviceCategoryInUseException(int categoryId)
-            : base($"DeviceCategory with id {categoryId} cannot be deleted because it has associated DeviceTypes.")
+            : base($"קטגוריית מכשיר עם מזהה {categoryId} לא ניתנת למחיקה כי יש לה סוגי מכשירים משויכים.")
         {
         }
     }

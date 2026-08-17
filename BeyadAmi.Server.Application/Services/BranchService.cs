@@ -56,7 +56,7 @@ namespace BeyadAmi.Server.Application.Services
 
             // BranchName business rule: required
             if (string.IsNullOrWhiteSpace(dto.BranchName))
-                throw new BusinessException("BranchName is required.");
+                throw new BusinessException("שם הסניף הוא שדה חובה.");
 
             existing.BranchName = dto.BranchName;
             existing.City = dto.City;
@@ -77,12 +77,12 @@ namespace BeyadAmi.Server.Application.Services
 
             // Rule: cannot delete branch that has devices
             if (existing.Devices != null && existing.Devices.Any())
-                throw new BranchHasDevicesException("Cannot delete branch that has devices.");
+                throw new BranchHasDevicesException("לא ניתן למחוק סניף שיש לו מכשירים.");
 
             // Rule: cannot delete branch that has active loans
             var hasActiveLoan = existing.Devices != null && existing.Devices.Any(d => d.Loans != null && d.Loans.Any(l => l.ReturnDate == null));
             if (hasActiveLoan)
-                throw new BranchHasDevicesException("Cannot delete branch that has active loans.");
+                throw new BranchHasDevicesException("לא ניתן למחוק סניף שיש לו השאלות פעילות.");
 
             _repository.Delete(existing);
         }

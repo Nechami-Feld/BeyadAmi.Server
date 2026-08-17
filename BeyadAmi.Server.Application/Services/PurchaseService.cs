@@ -55,10 +55,10 @@ namespace BeyadAmi.Server.Application.Services
                 ?? throw new PurchaseNotFoundException(purchaseId);
 
             if (dto.Quantity <= 0)
-                throw new InvalidPurchaseException("Quantity must be greater than 0.");
+                throw new InvalidPurchaseException("הכמות חייבת להיות גדולה מ-0.");
 
             if (dto.PricePerUnit < 0)
-                throw new InvalidPurchaseException("PricePerUnit must be greater than or equal to 0.");
+                throw new InvalidPurchaseException("מחיר ליחידה חייב להיות גדול מ-0 או שווה לו.");
 
             existing.StoreId = dto.StoreId;
             existing.ProductId = dto.ProductId;

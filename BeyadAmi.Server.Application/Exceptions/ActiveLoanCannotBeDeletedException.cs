@@ -3,7 +3,7 @@ namespace BeyadAmi.Server.Application.Exceptions
     public class ActiveLoanCannotBeDeletedException : BusinessException
     {
         public ActiveLoanCannotBeDeletedException(int loanId)
-            : base($"Loan with id {loanId} is active and cannot be deleted.")
+            : base($"השאלה עם מזהה {loanId} פעילה ולא ניתן למחוק אותה.")
         {
         }
     }

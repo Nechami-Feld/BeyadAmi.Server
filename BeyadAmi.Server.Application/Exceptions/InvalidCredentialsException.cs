@@ -4,6 +4,6 @@ namespace BeyadAmi.Server.Application.Exceptions
 {
     public class InvalidCredentialsException : Exception
     {
-        public InvalidCredentialsException() : base("Invalid credentials.") { }
+        public InvalidCredentialsException() : base("פרטי התחברות שגויים.") { }
     }
 }

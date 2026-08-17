@@ -10,29 +10,29 @@ namespace BeyadAmi.Server.Application.Validators
         public IEnumerable<string> Validate(RegisterRequestDto dto)
         {
             if (dto == null)
-                return new[] { "Register payload is required." };
+                return new[] { "נדרש מידע להרשמה." };
 
             var errors = new List<string>();
 
             if (string.IsNullOrWhiteSpace(dto.UserName))
-                errors.Add("UserName is required.");
+                errors.Add("שם המשתמש הוא שדה חובה.");
             else if (dto.UserName.Length > 100)
-                errors.Add("UserName must not exceed 100 characters.");
+                errors.Add("שם המשתמש לא יכול לעלות על 100 תווים.");
 
             if (string.IsNullOrWhiteSpace(dto.Email))
-                errors.Add("Email is required.");
+                errors.Add("כתובת האימייל היא שדה חובה.");
             else if (!IsValidEmail(dto.Email))
-                errors.Add("Email is not a valid email address.");
+                errors.Add("כתובת האימייל אינה תקינה.");
 
             if (string.IsNullOrWhiteSpace(dto.Password))
-                errors.Add("Password is required.");
+                errors.Add("הסיסמה היא שדה חובה.");
             else if (dto.Password.Length < 6)
-                errors.Add("Password must be at least 6 characters long.");
+                errors.Add("הסיסמה חייבת להכיל לפחות 6 תווים.");
 
             if (string.IsNullOrWhiteSpace(dto.ConfirmPassword))
-                errors.Add("ConfirmPassword is required.");
+                errors.Add("אישור הסיסמה הוא שדה חובה.");
             else if (dto.Password != dto.ConfirmPassword)
-                errors.Add("Password and ConfirmPassword must match.");
+                errors.Add("הסיסמה ואישור הסיסמה אינם תואמים.");
 
             return errors;
         }

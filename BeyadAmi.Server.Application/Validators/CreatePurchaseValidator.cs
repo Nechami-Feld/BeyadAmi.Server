@@ -9,27 +9,27 @@ namespace BeyadAmi.Server.Application.Validators
         public IEnumerable<string> Validate(CreatePurchaseDto dto)
         {
             if (dto == null)
-                return new[] { "Purchase payload is required." };
+                return new[] { "נדרש מידע לרכישה." };
 
             var errors = new List<string>();
 
             if (dto.StoreId <= 0)
-                errors.Add("StoreId is required.");
+                errors.Add("נדרש מזהה חנות.");
 
             if (dto.ProductId <= 0)
-                errors.Add("ProductId is required.");
+                errors.Add("נדרש מזהה מוצר.");
 
             if (dto.Quantity <= 0)
-                errors.Add("Quantity must be greater than 0.");
+                errors.Add("הכמות חייבת להיות גדולה מ-0.");
 
             if (dto.PricePerUnit < 0)
-                errors.Add("PricePerUnit must be greater than or equal to 0.");
+                errors.Add("מחיר ליחידה חייב להיות גדול מ-0 או שווה לו.");
 
             if (dto.PurchasedBy != null && dto.PurchasedBy.Length > 100)
-                errors.Add("PurchasedBy must not exceed 100 characters.");
+                errors.Add("שם הרוכש לא יכול לעלות על 100 תווים.");
 
             if (dto.Notes != null && dto.Notes.Length > 500)
-                errors.Add("Notes must not exceed 500 characters.");
+                errors.Add("ההערות לא יכולות לעלות על 500 תווים.");
 
             return errors;
         }

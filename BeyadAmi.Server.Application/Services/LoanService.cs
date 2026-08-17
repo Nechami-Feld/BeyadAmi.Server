@@ -76,13 +76,13 @@ namespace BeyadAmi.Server.Application.Services
                 ?? throw new LoanNotFoundException(loanId);
 
             if (string.IsNullOrWhiteSpace(dto.BorrowerLastName))
-                throw new BusinessException("BorrowerLastName is required.");
+                throw new BusinessException("שם משפחת השואל הוא שדה חובה.");
 
             if (string.IsNullOrWhiteSpace(dto.Phone))
-                throw new BusinessException("Phone is required.");
+                throw new BusinessException("מספר הטלפון הוא שדה חובה.");
 
             if (dto.DepositTypeId <= 0)
-                throw new BusinessException("DepositTypeId is required.");
+                throw new BusinessException("נדרש מזהה סוג פיקדון.");
 
             existing.LastName = dto.BorrowerLastName;
             existing.Address = dto.Address;

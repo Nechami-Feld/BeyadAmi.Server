@@ -44,7 +44,7 @@ namespace BeyadAmi.Server.Api.Middleware
                 else if (ex is BeyadAmi.Server.Application.Exceptions.InvalidCredentialsException || exTypeName == "InvalidCredentialsException")
                 {
                     statusCode = (int)HttpStatusCode.Unauthorized;
-                    message = "Invalid credentials.";
+                    message = "פרטי התחברות שגויים.";
                 }
                 else if (ex is BeyadAmi.Server.Application.Exceptions.UserAlreadyExistsException || exTypeName == "UserAlreadyExistsException")
                 {
@@ -59,7 +59,7 @@ namespace BeyadAmi.Server.Api.Middleware
                 else
                 {
                     statusCode = (int)HttpStatusCode.InternalServerError;
-                    message = "An unexpected error occurred.";
+                    message = "אירעה שגיאה בלתי צפויה.";
                 }
 
                 var result = JsonSerializer.Serialize(new { message, statusCode, traceId });

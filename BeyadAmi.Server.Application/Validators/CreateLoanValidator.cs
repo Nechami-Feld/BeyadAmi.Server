@@ -11,21 +11,21 @@ namespace BeyadAmi.Server.Application.Validators
         public IEnumerable<string> Validate(CreateLoanDto dto)
         {
             if (dto == null)
-                return new[] { "Loan payload is required." };
+                return new[] { "נדרש מידע להשאלה." };
 
             var errors = new List<string>();
 
             if (dto.DeviceId <= 0)
-                errors.Add("DeviceId is required.");
+                errors.Add("נדרש מזהה מכשיר.");
 
             if (string.IsNullOrWhiteSpace(dto.BorrowerLastName))
-                errors.Add("BorrowerLastName is required.");
+                errors.Add("שם משפחת השואל הוא שדה חובה.");
 
             if (string.IsNullOrWhiteSpace(dto.Phone))
-                errors.Add("Phone is required.");
+                errors.Add("מספר הטלפון הוא שדה חובה.");
 
             if (dto.DepositTypeId <= 0)
-                errors.Add("DepositTypeId is required.");
+                errors.Add("נדרש מזהה סוג פיקדון.");
 
             return errors;
         }

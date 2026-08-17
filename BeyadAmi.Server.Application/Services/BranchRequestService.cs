@@ -51,7 +51,7 @@ namespace BeyadAmi.Server.Application.Services
                 ?? throw new BranchRequestNotFoundException(id);
 
             if (dto.Request == null)
-                throw new BusinessException("Request is required.");
+                throw new BusinessException("תוכן הבקשה הוא שדה חובה.");
 
             if(!existing.IsCompleted && dto.IsCompleted)
             {

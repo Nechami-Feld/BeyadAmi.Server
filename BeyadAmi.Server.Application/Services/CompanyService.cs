@@ -32,7 +32,7 @@ namespace BeyadAmi.Server.Application.Services
 
             // check duplicate name
             if (await _repository.ExistsByNameAsync(dto.CompanyName, cancellationToken))
-                throw new BusinessException("Company with the same name already exists.");
+                throw new BusinessException("חברה עם אותו שם כבר קיימת.");
 
             var entity = new Company
             {
@@ -48,16 +48,16 @@ namespace BeyadAmi.Server.Application.Services
             if (dto == null) throw new ArgumentNullException(nameof(dto));
 
             var existing = await _repository.GetByIdAsync(companyId, cancellationToken);
-            if (existing == null) throw new BusinessException($"Company with id {companyId} was not found.");
+            if (existing == null) throw new BusinessException($"חברה עם מזהה {companyId} לא נמצאה.");
 
             if (string.IsNullOrWhiteSpace(dto.CompanyName))
-                throw new BusinessException("CompanyName is required.");
+                throw new BusinessException("שם החברה הוא שדה חובה.");
 
             // if name changed, check duplicates
             if (!string.Equals(existing.CompanyName, dto.CompanyName, StringComparison.OrdinalIgnoreCase)
                 && await _repository.ExistsByNameAsync(dto.CompanyName, cancellationToken))
             {
-                throw new BusinessException("Company with the same name already exists.");
+                throw new BusinessException("חברה עם אותו שם כבר קיימת.");
             }
 
             existing.CompanyName = dto.CompanyName;
@@ -75,7 +75,7 @@ namespace BeyadAmi.Server.Application.Services
         public async Task<CompanyDto?> GetByIdAsync(int companyId, CancellationToken cancellationToken = default)
         {
             var entity = await _repository.GetByIdAsync(companyId, cancellationToken);
-            if (entity == null) throw new BusinessException($"Company with id {companyId} was not found.");
+            if (entity == null) throw new BusinessException($"חברה עם מזהה {companyId} לא נמצאה.");
 
             return MapToDto(entity);
         }

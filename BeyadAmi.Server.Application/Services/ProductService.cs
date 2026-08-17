@@ -71,10 +71,10 @@ namespace BeyadAmi.Server.Application.Services
                 ?? throw new ProductNotFoundException(productId);
 
             if (string.IsNullOrWhiteSpace(dto.ProductName))
-                throw new BusinessException("ProductName is required.");
+                throw new BusinessException("שם המוצר הוא שדה חובה.");
 
             if (string.IsNullOrWhiteSpace(dto.Model))
-                throw new BusinessException("Model is required.");
+                throw new BusinessException("הדגם הוא שדה חובה.");
 
             var nameChanged = !string.Equals(existing.ProductName, dto.ProductName, StringComparison.OrdinalIgnoreCase)
                 || !string.Equals(existing.Model, dto.Model, StringComparison.OrdinalIgnoreCase)

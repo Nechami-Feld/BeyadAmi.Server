@@ -10,13 +10,13 @@ namespace BeyadAmi.Server.Application.Validators
 
         public IEnumerable<string> Validate(CreateCompanyDto dto)
         {
-            if (dto == null) return new[] { "CreateCompany payload is required." };
+            if (dto == null) return new[] { "נדרש מידע לחברה." };
 
             var errors = new List<string>();
             if (string.IsNullOrWhiteSpace(dto.CompanyName))
-                errors.Add("CompanyName is required.");
+                errors.Add("שם החברה הוא שדה חובה.");
             else if (dto.CompanyName.Length > MaxNameLength)
-                errors.Add($"CompanyName must not exceed {MaxNameLength} characters.");
+                errors.Add($"שם החברה לא יכול לעלות על {MaxNameLength} תווים.");
 
             return errors;
         }

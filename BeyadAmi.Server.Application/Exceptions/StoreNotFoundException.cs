@@ -4,6 +4,6 @@ namespace BeyadAmi.Server.Application.Exceptions
 {
     public class StoreNotFoundException : BusinessException
     {
-        public StoreNotFoundException(int storeId) : base($"Store with id {storeId} was not found.") { }
+        public StoreNotFoundException(int storeId) : base($"חנות עם מזהה {storeId} לא נמצאה.") { }
     }
 }

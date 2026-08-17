@@ -9,12 +9,12 @@ namespace BeyadAmi.Server.Application.Validators
         public IEnumerable<string> Validate(CreateDeviceCategoryDto dto)
         {
             if (dto == null)
-                return new[] { "DeviceCategory payload is required." };
+                return new[] { "נדרש מידע לקטגוריית מכשיר." };
 
             var errors = new List<string>();
 
             if (string.IsNullOrWhiteSpace(dto.CategoryName))
-                errors.Add("CategoryName is required.");
+                errors.Add("שם הקטגוריה הוא שדה חובה.");
 
             return errors;
         }

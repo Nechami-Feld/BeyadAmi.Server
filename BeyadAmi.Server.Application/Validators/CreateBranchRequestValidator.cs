@@ -9,21 +9,21 @@ namespace BeyadAmi.Server.Application.Validators
         public IEnumerable<string> Validate(CreateBranchRequestDto dto)
         {
             if (dto == null)
-                return new[] { "BranchRequest payload is required." };
+                return new[] { "נדרש מידע לבקשת סניף." };
 
             var errors = new List<string>();
 
             if (dto.BranchId <= 0)
-                errors.Add("BranchId is required.");
+                errors.Add("נדרש מזהה סניף.");
 
             if (dto.Request is null)
-                errors.Add("Request is required.");
+                errors.Add("נדרש תוכן הבקשה.");
 
             if (dto.Request != null && dto.Request.Length > 500)
-                errors.Add("Request must not exceed 500 characters.");
+                errors.Add("הבקשה לא יכולה לעלות על 500 תווים.");
 
             if (dto.Notes != null && dto.Notes.Length > 500)
-                errors.Add("Notes must not exceed 500 characters.");
+                errors.Add("ההערות לא יכולות לעלות על 500 תווים.");
 
             return errors;
         }

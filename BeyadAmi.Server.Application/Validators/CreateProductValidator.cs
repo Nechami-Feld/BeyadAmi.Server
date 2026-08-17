@@ -9,25 +9,25 @@ namespace BeyadAmi.Server.Application.Validators
         public IEnumerable<string> Validate(CreateProductDto dto)
         {
             if (dto == null)
-                return new[] { "Product payload is required." };
+                return new[] { "נדרש מידע למוצר." };
 
             var errors = new List<string>();
 
             if (string.IsNullOrWhiteSpace(dto.ProductName))
-                errors.Add("ProductName is required.");
+                errors.Add("שם המוצר הוא שדה חובה.");
             else if (dto.ProductName.Length > 100)
-                errors.Add("ProductName must not exceed 100 characters.");
+                errors.Add("שם המוצר לא יכול לעלות על 100 תווים.");
 
             if (string.IsNullOrWhiteSpace(dto.Model))
-                errors.Add("Model is required.");
+                errors.Add("הדגם הוא שדה חובה.");
             else if (dto.Model.Length > 100)
-                errors.Add("Model must not exceed 100 characters.");
+                errors.Add("הדגם לא יכול לעלות על 100 תווים.");
 
             if (dto.Company != null && dto.Company.Length > 100)
-                errors.Add("Company must not exceed 100 characters.");
+                errors.Add("שם החברה לא יכול לעלות על 100 תווים.");
 
             if (dto.Notes != null && dto.Notes.Length > 500)
-                errors.Add("Notes must not exceed 500 characters.");
+                errors.Add("ההערות לא יכולות לעלות על 500 תווים.");
 
             return errors;
         }

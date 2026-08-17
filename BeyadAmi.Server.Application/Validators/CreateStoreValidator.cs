@@ -13,21 +13,21 @@ namespace BeyadAmi.Server.Application.Validators
         public IEnumerable<string> Validate(CreateStoreDto dto)
         {
             if (dto == null)
-                return new[] { "Store payload is required." };
+                return new[] { "נדרש מידע לחנות." };
 
             var errors = new List<string>();
 
             if (string.IsNullOrWhiteSpace(dto.StoreName))
-                errors.Add("StoreName is required.");
+                errors.Add("שם החנות הוא שדה חובה.");
 
             if (!string.IsNullOrWhiteSpace(dto.StoreName) && dto.StoreName.Length > 100)
-                errors.Add("StoreName must be at most 100 characters.");
+                errors.Add("שם החנות לא יכול לעלות על 100 תווים.");
 
             if (!string.IsNullOrWhiteSpace(dto.Phone) && !PhoneRegex.IsMatch(dto.Phone))
-                errors.Add("Phone format is invalid.");
+                errors.Add("מספר הטלפון אינו תקין.");
 
             if (!string.IsNullOrWhiteSpace(dto.Email) && !EmailRegex.IsMatch(dto.Email))
-                errors.Add("Email format is invalid.");
+                errors.Add("כתובת האימייל אינה תקינה.");
 
             return errors;
         }

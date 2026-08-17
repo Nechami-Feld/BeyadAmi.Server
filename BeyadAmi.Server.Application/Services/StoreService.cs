@@ -52,7 +52,7 @@ namespace BeyadAmi.Server.Application.Services
             if (existing == null) throw new StoreNotFoundException(storeId);
 
             if (string.IsNullOrWhiteSpace(dto.StoreName))
-                throw new BusinessException("StoreName is required.");
+                throw new BusinessException("שם החנות הוא שדה חובה.");
 
             existing.IsActive = dto.IsActive;
             existing.StoreName = dto.StoreName;
@@ -71,7 +71,7 @@ namespace BeyadAmi.Server.Application.Services
 
             var hasProducts = await _repository.HasProductsAsync(storeId, cancellationToken);
             if (hasProducts)
-                throw new StoreHasProductsException("Cannot delete store that has products.");
+                throw new StoreHasProductsException("לא ניתן למחוק חנות שיש לה מוצרים.");
 
             _repository.Delete(existing);
         }
