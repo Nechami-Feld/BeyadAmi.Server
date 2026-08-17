@@ -109,12 +109,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Swagger רק בסביבת Development
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 // Global exception handling middleware - must be before controllers
 app.UseMiddleware<BeyadAmi.Server.Api.Middleware.ExceptionMiddleware>();
