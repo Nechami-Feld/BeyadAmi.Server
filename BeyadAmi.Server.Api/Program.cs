@@ -1,13 +1,14 @@
 using BeyadAmi.Server.Application.Interfaces.Repositories;
 using BeyadAmi.Server.Application.Interfaces.Services;
 using BeyadAmi.Server.Application.Services;
+using BeyadAmi.Server.Application.Settings;
 using BeyadAmi.Server.Infrastructure.Extensions;
+using BeyadAmi.Server.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
-using BeyadAmi.Server.Application.Settings;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -120,8 +121,14 @@ app.UseMiddleware<BeyadAmi.Server.Api.Middleware.ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
 
 app.UseCors("Angular");
+app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();
