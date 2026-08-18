@@ -118,12 +118,14 @@ app.UseSwaggerUI();
 // Global exception handling middleware - must be before controllers
 app.UseMiddleware<BeyadAmi.Server.Api.Middleware.ExceptionMiddleware>();
 
-app.UseAuthentication();
-app.UseAuthorization();
 
 
 app.UseCors("Angular");
-app.MapControllers();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();   
 
 using (var scope = app.Services.CreateScope())
 {
