@@ -124,8 +124,8 @@ namespace BeyadAmi.Server.Api.Controllers
             if (dto == null)
                 return BadRequest("Request body is required.");
 
-            var newId = await _service.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetById), new { id = newId }, null);
+            var purchase = await _service.CreateAsync(dto, cancellationToken);
+            return CreatedAtAction(nameof(GetById), new { id = purchase.PurchaseId }, purchase);
         }
 
         /// <summary>

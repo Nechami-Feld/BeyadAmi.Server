@@ -22,7 +22,7 @@ namespace BeyadAmi.Server.Application.Services
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<int> CreateAsync(CreatePurchaseDto dto, CancellationToken cancellationToken = default)
+        public async Task<PurchaseDto> CreateAsync(CreatePurchaseDto dto, CancellationToken cancellationToken = default)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
 
@@ -38,13 +38,15 @@ namespace BeyadAmi.Server.Application.Services
                 PricePerUnit = dto.PricePerUnit,
                 TotalPrice = dto.Quantity * dto.PricePerUnit,
                 BuyerName = dto.PurchasedBy,
-                PurchaseDate = dto.PurchaseDate ?? DateTime.UtcNow,
+                PurchaseDate = dto.PurchaseDate.HasValue
+        ? DateTime.SpecifyKind(dto.PurchaseDate.Value, DateTimeKind.Utc)
+        : DateTime.UtcNow,
                 ReceiptFile = dto.Receipt,
                 Notes = dto.Notes
             };
 
             await _repository.AddAsync(entity, cancellationToken);
-            return entity.PurchaseId;
+            return MapToDto(entity);
         }
 
         public async Task UpdateAsync(int purchaseId, UpdatePurchaseDto dto, CancellationToken cancellationToken = default)

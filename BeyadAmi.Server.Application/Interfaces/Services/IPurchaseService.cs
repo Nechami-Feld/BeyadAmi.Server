@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BeyadAmi.Server.Application.DTOs.Purchases;
+using BeyadAmi.Server.Domain.Entities;
 
 namespace BeyadAmi.Server.Application.Interfaces.Services
 {
@@ -11,7 +12,7 @@ namespace BeyadAmi.Server.Application.Interfaces.Services
         Task<List<PurchaseDto>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<List<PurchaseDto>> GetByStoreAsync(int storeId, CancellationToken cancellationToken = default);
         Task<List<PurchaseDto>> GetByProductAsync(int productId, CancellationToken cancellationToken = default);
-        Task<int> CreateAsync(CreatePurchaseDto dto, CancellationToken cancellationToken = default);
+        Task<PurchaseDto> CreateAsync(CreatePurchaseDto dto, CancellationToken cancellationToken = default);
         Task UpdateAsync(int purchaseId, UpdatePurchaseDto dto, CancellationToken cancellationToken = default);
         Task DeleteAsync(int purchaseId, CancellationToken cancellationToken = default);
         Task UpdateReceiptAsync(int purchaseId, string? receiptFile, CancellationToken cancellationToken = default);

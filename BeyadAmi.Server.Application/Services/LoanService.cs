@@ -62,7 +62,9 @@ namespace BeyadAmi.Server.Application.Services
             var existing = await _repository.GetByIdAsync(loanId, cancellationToken)
                 ?? throw new LoanNotFoundException(loanId);
 
-            existing.ReturnDate = dto.ReturnDate ?? DateTime.UtcNow;
+            existing.ReturnDate = dto.ReturnDate.HasValue
+                ? DateTime.SpecifyKind(dto.ReturnDate.Value, DateTimeKind.Utc)
+                : DateTime.UtcNow;
             existing.Notes = dto.Notes ?? existing.Notes;
 
             _repository.Update(existing);

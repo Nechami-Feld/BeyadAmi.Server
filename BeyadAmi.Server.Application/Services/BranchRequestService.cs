@@ -55,7 +55,7 @@ namespace BeyadAmi.Server.Application.Services
 
             if(!existing.IsCompleted && dto.IsCompleted)
             {
-                existing.CompletedDate = DateTime.Now;
+                existing.CompletedDate = DateTime.UtcNow;
             }
             if (existing.IsCompleted && !dto.IsCompleted)
             {
