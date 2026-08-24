@@ -114,6 +114,9 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+// Serve static files (receipts will be stored under wwwroot/receipts)
+app.UseStaticFiles();
+
 
 // Global exception handling middleware - must be before controllers
 app.UseMiddleware<BeyadAmi.Server.Api.Middleware.ExceptionMiddleware>();
@@ -131,6 +134,14 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
+}
+
+// Ensure receipts folder exists
+var webRoot = app.Environment.ContentRootPath;
+var receiptsPath = System.IO.Path.Combine(webRoot, "wwwroot", "receipts");
+if (!System.IO.Directory.Exists(receiptsPath))
+{
+    System.IO.Directory.CreateDirectory(receiptsPath);
 }
 
 app.Run();

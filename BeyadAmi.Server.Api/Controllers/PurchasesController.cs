@@ -3,6 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BeyadAmi.Server.Application.DTOs.Purchases;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System;
+
 using BeyadAmi.Server.Application.Interfaces.Services;
 
 namespace BeyadAmi.Server.Api.Controllers
@@ -12,10 +17,12 @@ namespace BeyadAmi.Server.Api.Controllers
     public class PurchasesController : ControllerBase
     {
         private readonly IPurchaseService _service;
+        private readonly IWebHostEnvironment _env;
 
-        public PurchasesController(IPurchaseService service)
+        public PurchasesController(IPurchaseService service, IWebHostEnvironment env)
         {
             _service = service;
+            _env = env;
         }
 
         /// <summary>
@@ -27,6 +34,47 @@ namespace BeyadAmi.Server.Api.Controllers
         {
             var result = await _service.GetAllAsync(cancellationToken);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Upload receipt file for a purchase. Stores file under wwwroot/receipts and updates purchase. Returns 200.
+        /// </summary>
+        [HttpPost("{id:int}/receipt")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> UploadReceipt(int id, IFormFile file, CancellationToken cancellationToken = default)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("File is required.");
+
+            // validate size (max 10 MB)
+            const long maxBytes = 10 * 1024 * 1024;
+            if (file.Length > maxBytes)
+                return BadRequest("File is too large (max 10 MB).");
+
+            // validate extension
+            var allowed = new[] { ".pdf", ".png", ".jpg", ".jpeg" };
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (string.IsNullOrEmpty(ext) || Array.IndexOf(allowed, ext) < 0)
+                return BadRequest("Unsupported file type. Allowed: pdf, png, jpg, jpeg.");
+
+            // ensure directory
+            var receiptsFolder = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "receipts");
+            if (!Directory.Exists(receiptsFolder)) Directory.CreateDirectory(receiptsFolder);
+
+            var fileName = $"{Guid.NewGuid()}{ext}";
+            var filePath = Path.Combine(receiptsFolder, fileName);
+
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await file.CopyToAsync(stream, cancellationToken);
+            }
+
+            // update purchase
+            await _service.UpdateReceiptAsync(id, fileName, cancellationToken);
+
+            return Ok(new { ReceiptUrl = $"/receipts/{fileName}" });
         }
 
         /// <summary>

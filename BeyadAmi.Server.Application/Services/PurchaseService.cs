@@ -80,6 +80,15 @@ namespace BeyadAmi.Server.Application.Services
             _repository.Delete(existing);
         }
 
+        public async Task UpdateReceiptAsync(int purchaseId, string? receiptFile, CancellationToken cancellationToken = default)
+        {
+            var existing = await _repository.GetByIdAsync(purchaseId, cancellationToken)
+                ?? throw new PurchaseNotFoundException(purchaseId);
+
+            existing.ReceiptFile = receiptFile;
+            _repository.Update(existing);
+        }
+
         public async Task<PurchaseDto?> GetByIdAsync(int purchaseId, CancellationToken cancellationToken = default)
         {
             var entity = await _repository.GetByIdAsync(purchaseId, cancellationToken);
@@ -118,7 +127,7 @@ namespace BeyadAmi.Server.Application.Services
             TotalPrice = p.Quantity * p.PricePerUnit,
             PurchasedBy = p.BuyerName,
             PurchaseDate = p.PurchaseDate,
-            Receipt = p.ReceiptFile,
+            Receipt = string.IsNullOrEmpty(p.ReceiptFile) ? null : $"/receipts/{p.ReceiptFile}",
             Notes = p.Notes
         };
     }

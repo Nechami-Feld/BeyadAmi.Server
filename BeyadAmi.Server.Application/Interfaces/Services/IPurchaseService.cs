@@ -14,5 +14,6 @@ namespace BeyadAmi.Server.Application.Interfaces.Services
         Task<int> CreateAsync(CreatePurchaseDto dto, CancellationToken cancellationToken = default);
         Task UpdateAsync(int purchaseId, UpdatePurchaseDto dto, CancellationToken cancellationToken = default);
         Task DeleteAsync(int purchaseId, CancellationToken cancellationToken = default);
+        Task UpdateReceiptAsync(int purchaseId, string? receiptFile, CancellationToken cancellationToken = default);
     }
 }
