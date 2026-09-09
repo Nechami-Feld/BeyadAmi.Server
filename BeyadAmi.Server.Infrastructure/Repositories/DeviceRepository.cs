@@ -68,6 +68,7 @@ namespace BeyadAmi.Server.Infrastructure.Repositories
                 .Include(d => d.Category)
                 .Include(d => d.Branch)
                 .Include(d => d.Loans)
+                .Include(d => d.Company)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }

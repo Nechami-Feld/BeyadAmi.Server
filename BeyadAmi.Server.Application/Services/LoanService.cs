@@ -136,6 +136,7 @@ namespace BeyadAmi.Server.Application.Services
             DeviceId = l.DeviceId,
             DeviceNumber = l.Device?.DeviceNumber,
             BranchName = l.Device?.Branch?.BranchName,
+            CategoryName = l.Device.Category.CategoryName,
             BorrowerLastName = l.LastName,
             Address = l.Address,
             Phone = l.Phone,
@@ -144,7 +145,7 @@ namespace BeyadAmi.Server.Application.Services
             LoanDate = l.LoanDate,
             ReturnDate = l.ReturnDate,
             IsActive = l.IsActive,
-            Notes = l.Notes
+            Notes = l.Notes,
         };
     }
 }

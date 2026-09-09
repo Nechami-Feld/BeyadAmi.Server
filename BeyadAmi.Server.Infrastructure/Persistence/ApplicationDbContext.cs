@@ -12,7 +12,6 @@ namespace BeyadAmi.Server.Infrastructure.Persistence
 
         public DbSet<Branch> Branches { get; set; }
         public DbSet<DeviceCategory> DeviceCategories { get; set; }
-        public DbSet<DeviceType> DeviceTypes { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<Loan> Loans { get; set; }
         public DbSet<DepositType> DepositTypes { get; set; }

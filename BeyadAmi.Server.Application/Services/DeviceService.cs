@@ -38,7 +38,7 @@ namespace BeyadAmi.Server.Application.Services
                 CategoryId = dto.CategoryId,
                 BranchId = dto.BranchId,
                 DeviceNumber = dto.DeviceNumber,
-                Company = dto.Company,
+                CompanyId = dto.CompanyId,
                 Notes = dto.Notes,
                 CreatedDate = DateTime.UtcNow
             };
@@ -56,7 +56,7 @@ namespace BeyadAmi.Server.Application.Services
 
             existing.CategoryId = dto.CategoryId;
             existing.BranchId = dto.BranchId;
-            existing.Company = dto.Company;
+            existing.CompanyId = dto.CompanyId;
             existing.Notes = dto.Notes;
 
             _repository.Update(existing);
@@ -105,7 +105,8 @@ namespace BeyadAmi.Server.Application.Services
             CategoryName = d.Category?.CategoryName,
             BranchId = d.BranchId,
             BranchName = d.Branch?.BranchName,
-            Company = d.Company,
+            CompanyId = d.CompanyId,
+            CompanyName = d.Company?.CompanyName,
             IsAvailable = !d.IsLoaned,
             Notes = d.Notes
         };

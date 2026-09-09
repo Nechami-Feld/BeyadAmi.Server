@@ -3,6 +3,7 @@ using System;
 using BeyadAmi.Server.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BeyadAmi.Server.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260826190633_AddDeviceTemplate")]
+    partial class AddDeviceTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,8 +166,11 @@ namespace BeyadAmi.Server.Infrastructure.Migrations
 
             modelBuilder.Entity("BeyadAmi.Server.Domain.Entities.Device", b =>
                 {
-                    b.Property<int>("CompanyId")
+                    b.Property<int>("DeviceId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DeviceId"));
 
                     b.Property<int>("BranchId")
                         .HasColumnType("integer");
@@ -172,11 +178,12 @@ namespace BeyadAmi.Server.Infrastructure.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Company")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("DeviceNumber")
                         .HasMaxLength(100)
@@ -185,7 +192,7 @@ namespace BeyadAmi.Server.Infrastructure.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
-                    b.HasKey("CompanyId");
+                    b.HasKey("DeviceId");
 
                     b.HasIndex("BranchId");
 
@@ -607,17 +614,9 @@ namespace BeyadAmi.Server.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BeyadAmi.Server.Domain.Entities.Company", "Company")
-                        .WithMany("Devices")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Branch");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("BeyadAmi.Server.Domain.Entities.DeviceTemplate", b =>
@@ -725,11 +724,6 @@ namespace BeyadAmi.Server.Infrastructure.Migrations
                     b.Navigation("Devices");
 
                     b.Navigation("SurveySendings");
-                });
-
-            modelBuilder.Entity("BeyadAmi.Server.Domain.Entities.Company", b =>
-                {
-                    b.Navigation("Devices");
                 });
 
             modelBuilder.Entity("BeyadAmi.Server.Domain.Entities.DepositType", b =>

@@ -4,5 +4,13 @@ namespace BeyadAmi.Server.Domain.Entities
     {
         public int CompanyId { get; set; }
         public string CompanyName { get; set; } = string.Empty;
+
+        // Navigation properties
+        public ICollection<Device>? Devices { get; set; }
+
+        public Company()
+        {
+            Devices = new List<Device>();
+        }
     }
 }

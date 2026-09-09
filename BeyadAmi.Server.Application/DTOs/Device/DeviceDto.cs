@@ -8,7 +8,8 @@ namespace BeyadAmi.Server.Application.DTOs.Device
         public string? CategoryName { get; set; }
         public int BranchId { get; set; }
         public string? BranchName { get; set; }
-        public string? Company { get; set; }
+        public int? CompanyId { get; set; }
+        public string? CompanyName { get; set; }
         public bool IsAvailable { get; set; }
         public string? Notes { get; set; }
     }

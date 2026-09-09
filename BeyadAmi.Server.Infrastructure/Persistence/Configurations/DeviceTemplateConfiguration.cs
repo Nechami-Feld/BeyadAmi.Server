@@ -10,23 +10,18 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
         {
             builder.ToTable("DeviceTemplates");
 
-            builder.HasKey(dt => dt.TemplateId);
+            builder.HasKey(dt => dt.DeviceTemplateId);
 
             builder.Property(dt => dt.TemplateName)
                 .HasMaxLength(200);
 
-            builder.Property(dt => dt.FilePath)
-                .HasMaxLength(500);
+            builder.Property(dt => dt.TemplateText)
+                .HasMaxLength(2000);
 
             builder.Property(dt => dt.CreatedDate)
                 .IsRequired();
 
-            builder.HasOne(dt => dt.DeviceType)
-                .WithMany(t => t.DeviceTemplates)
-                .HasForeignKey(dt => dt.DeviceTypeId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasIndex(dt => dt.DeviceTypeId).HasDatabaseName("IX_DeviceTemplates_DeviceTypeId");
+            builder.HasIndex(dt => dt.DeviceCategoryId).HasDatabaseName("IX_DeviceTemplates_DeviceCategoryId");
         }
     }
 }

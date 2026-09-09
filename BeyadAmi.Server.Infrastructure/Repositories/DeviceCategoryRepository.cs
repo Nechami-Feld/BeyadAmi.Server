@@ -44,11 +44,6 @@ namespace BeyadAmi.Server.Infrastructure.Repositories
                 .AnyAsync(c => c.CategoryName == categoryName, cancellationToken);
         }
 
-        public async Task<bool> HasDeviceTypesAsync(int categoryId, CancellationToken cancellationToken = default)
-        {
-            return await _db.DeviceTypes
-                .AnyAsync(t => t.CategoryId == categoryId, cancellationToken);
-        }
 
         public async Task AddAsync(DeviceCategory category, CancellationToken cancellationToken = default)
         {

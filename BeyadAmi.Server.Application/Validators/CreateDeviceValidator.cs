@@ -26,8 +26,8 @@ namespace BeyadAmi.Server.Application.Validators
             else if (dto.DeviceNumber.Length > 50)
                 errors.Add("מספר המכשיר לא יכול לעלות על 50 תווים.");
 
-            if (!string.IsNullOrWhiteSpace(dto.Company) && dto.Company.Length > 100)
-                errors.Add("שם החברה לא יכול לעלות על 100 תווים.");
+            if (dto.CompanyId <= 0)
+                errors.Add("מזהה החברה חייב להיות מספר חיובי.");
 
             return errors;
         }

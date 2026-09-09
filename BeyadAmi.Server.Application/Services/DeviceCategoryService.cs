@@ -68,9 +68,6 @@ namespace BeyadAmi.Server.Application.Services
             var existing = await _repository.GetByIdAsync(categoryId, cancellationToken);
             if (existing == null) return;
 
-            if (await _repository.HasDeviceTypesAsync(categoryId, cancellationToken))
-                throw new DeviceCategoryInUseException(categoryId);
-
             _repository.Delete(existing);
         }
 

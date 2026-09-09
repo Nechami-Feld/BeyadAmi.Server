@@ -16,8 +16,7 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
             builder.Property(d => d.DeviceNumber)
                 .HasMaxLength(100);
 
-            builder.Property(d => d.Company)
-                .HasMaxLength(100);
+            builder.HasKey(d => d.CompanyId);
 
             builder.Property(d => d.Notes)
                 .HasColumnType("text");
@@ -35,6 +34,11 @@ namespace BeyadAmi.Server.Infrastructure.Persistence.Configurations
                 .WithMany(b => b.Devices)
                 .HasForeignKey(d => d.BranchId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(d => d.Company)
+              .WithMany(b => b.Devices)
+              .HasForeignKey(d => d.CompanyId)
+              .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(d => d.Loans)
                 .WithOne(l => l.Device)

@@ -27,6 +27,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IDepositTypeRepository, DepositTypeRepository>();
+            services.AddScoped<IDeviceTemplateRepository, DeviceTemplateRepository>();
 
             // Authentication related
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -56,6 +57,7 @@ namespace BeyadAmi.Server.Infrastructure.Extensions
             services.AddScoped<IDepositTypeService, DepositTypeService>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IDeviceTemplateService, DeviceTemplateService>();
             services.AddScoped<BeyadAmi.Server.Application.Validators.CreateCompanyValidator>();
 
             return services;

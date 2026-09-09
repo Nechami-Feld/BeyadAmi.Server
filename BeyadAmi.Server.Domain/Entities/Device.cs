@@ -10,11 +10,12 @@ namespace BeyadAmi.Server.Domain.Entities
         public int CategoryId { get; set; }
         public int BranchId { get; set; }
         public string? DeviceNumber { get; set; }
-        public string? Company { get; set; }
+        public int? CompanyId { get; set; }
         public string? Notes { get; set; }
         public DateTime CreatedDate { get; set; }
 
         // Navigation
+        public Company? Company { get; set; }
         public DeviceCategory? Category { get; set; }
         public Branch? Branch { get; set; }
         public ICollection<Loan>? Loans { get; set; }
